@@ -1,9 +1,13 @@
 package com.EnergyForecasting.Model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
-
+@Entity
 public class Simulation {
-    private String simulationName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, updatable = false)
+    private Long ID;
     //stats on region being simulated
     private ArrayList<String> regions;
     private ArrayList<String> counties;
@@ -23,8 +27,8 @@ public class Simulation {
     public Simulation() {
     }
 
-    public Simulation(String simulationName, ArrayList<String> regions, ArrayList<String> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar) {
-        this.simulationName = simulationName;
+    public Simulation(Long ID, ArrayList<String> regions, ArrayList<String> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar) {
+        this.ID=ID;
         this.regions = regions;
         this.counties = counties;
 
@@ -39,12 +43,6 @@ public class Simulation {
         this.solar = solar;
     }
 
-    public String getSimulationName() {
-        return simulationName;
-    }
-    public void setSimulationName(String simulationName) {
-        this.simulationName = simulationName;
-    }
     public double getSolarOutput() {
         return solarOutput;
     }
@@ -93,19 +91,15 @@ public class Simulation {
     public void setWM2(double WM2) {
         this.WM2 = WM2;
     }
-
     public ArrayList<String> getRegions() {
         return regions;
     }
-
     public void setRegions(ArrayList<String> regions) {
         this.regions = regions;
     }
-
     public ArrayList<String> getCounties() {
         return counties;
     }
-
     public void setCounties(ArrayList<String> counties) {
         this.counties = counties;
     }
