@@ -9,32 +9,34 @@ public class Plant implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
     private Long id;
-    private String region;
+
     private String name;
+    private int noOf;
     private double capacity;
     private String type;
-    private int noOf;
+    private String region;
     private String county;
-    private String latitude;
-    private String longitude;
     private String latChar;
+    private String latitude;
     private String longChar;
+    private String longitude;
+
+    public Plant(String name, int noOf, double capacity, String type, String region, String county, String latChar, String latitude, String longChar, String longitude) {
+        this.name = name;
+        this.noOf = noOf;
+        this.capacity = capacity;
+        this.type = type;
+        this.region = region;
+        this.county = county;
+        this.latChar = latChar;
+        this.latitude = latitude;
+        this.longChar = longChar;
+        this.longitude = longitude;
+    }
 
     public Plant() {
     }
 
-    public Plant(String region, String name, double capacity, String type, int noOf, String county, String latitude, String longitude, String latChar, String longChar) {
-        this.region = region;
-        this.name = name;
-        this.capacity = capacity;
-        this.type = type;
-        this.noOf=noOf;
-        this.county=county;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.latChar = latChar;
-        this.longChar = longChar;
-    }
 
 
     public String getRegion() {
@@ -98,16 +100,16 @@ public class Plant implements Serializable {
     public String toString() {
         return "Plant{" +
                 "id=" + id +
-                ", region='" + region + '\'' +
                 ", name='" + name + '\'' +
+                ", noOf=" + noOf +
                 ", capacity=" + capacity +
                 ", type='" + type + '\'' +
-                ", noOf=" + noOf +
+                ", region='" + region + '\'' +
                 ", county='" + county + '\'' +
-                ", latitude='" + latitude + '\'' +
-                ", longitude='" + longitude + '\'' +
                 ", latChar='" + latChar + '\'' +
+                ", latitude='" + latitude + '\'' +
                 ", longChar='" + longChar + '\'' +
+                ", longitude='" + longitude + '\'' +
                 '}';
     }
 }
