@@ -20,6 +20,8 @@ public class Plant implements Serializable {
     private String latChar;
     private String longChar;
 
+    public Plant() {
+    }
 
     public Plant(String region, String name, double capacity, String type, int noOf, String county, String latitude, String longitude, String latChar, String longChar) {
         this.region = region;
@@ -33,6 +35,7 @@ public class Plant implements Serializable {
         this.latChar = latChar;
         this.longChar = longChar;
     }
+
 
     public String getRegion() {
         return region;

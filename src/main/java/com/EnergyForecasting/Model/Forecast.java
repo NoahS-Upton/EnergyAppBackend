@@ -23,9 +23,6 @@ public class Forecast implements Serializable {
     private boolean solar;
     private String userID;
 
-
-
-
     // Outputs to screen
     private double[] regionWindOutput;
     private double[] regionSolarOutput;
@@ -37,6 +34,8 @@ public class Forecast implements Serializable {
     private double[] windAngle;
     private ArrayList<CountyOutputs> countyOutputs;
 
+    public Forecast() {
+    }
 
     @Autowired
     public Forecast(boolean hourly, int days,ArrayList<String>region, ArrayList<String> county, boolean onshore, boolean offshore, boolean solar, String userID) {
@@ -51,8 +50,6 @@ public class Forecast implements Serializable {
 
 
     }
-
-
 
     //getters and setters for retrieving forecast(input variables)
     public Long getId() {

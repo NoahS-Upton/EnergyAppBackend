@@ -4,10 +4,12 @@ import javax.persistence.*;
 import java.util.ArrayList;
 @Entity
 public class Simulation {
+    //ID to track simulation
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
     private Long ID;
+
     //stats on region being simulated
     private ArrayList<String> regions;
     private ArrayList<String> counties;
@@ -24,25 +26,24 @@ public class Simulation {
     private boolean wind;
     private boolean solar;
 
+    //no args alt constructor
     public Simulation() {
     }
 
-    public Simulation(Long ID, ArrayList<String> regions, ArrayList<String> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar) {
-        this.ID=ID;
+    public Simulation( ArrayList<String> regions, ArrayList<String> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar) {
+        //inputs from user
         this.regions = regions;
         this.counties = counties;
-
-
         this.days = days;
         this.hourly = hourly;
-        WM2 = wm2;
-
+        this.WM2 = wm2;
         this.windSpeed = windSpeed;
-
         this.wind = wind;
         this.solar = solar;
     }
 
+
+    //getters and setters
     public double getSolarOutput() {
         return solarOutput;
     }
