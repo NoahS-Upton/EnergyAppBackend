@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @CrossOrigin("*")
 @RestController
-@RequestMapping(value= "/plant")
+@RequestMapping("/plant")
 public class PlantController {
     private final PlantService plantService;
 

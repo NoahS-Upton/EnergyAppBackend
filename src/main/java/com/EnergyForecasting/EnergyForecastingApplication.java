@@ -2,6 +2,7 @@ package com.EnergyForecasting;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +16,10 @@ import java.util.Arrays;
 
 @Configuration
 @SpringBootApplication
+@ComponentScan(basePackages = {"com.EnergyForecasting"})
 @ComponentScan({"com.EnergyForecasting.Model.Calculation"})
+@EntityScan("com.EnergyForecasting.*")
+
 //@ComponentScan({"com.EnergyForecasting.Model"})
 //@ComponentScan({"com.EnergyForecasting.Repository"})
 //@ComponentScan({"com.EnergyForecasting.Service"})

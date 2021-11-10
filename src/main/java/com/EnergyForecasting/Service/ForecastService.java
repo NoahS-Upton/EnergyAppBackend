@@ -26,12 +26,12 @@ public class ForecastService {
     private APICaller apiCaller;
 
     @Autowired
-    public ForecastService(ForecastRepo forecastRepo, PlantRepo plantRepo, PlantService plantService, Calculation calculation, APICaller apiCaller) {
+    public ForecastService(ForecastRepo forecastRepo, PlantRepo plantRepo, PlantService plantService) {
         this.forecastRepo = forecastRepo;
         this.plantRepo = plantRepo;
         this.plantService = plantService;
-        this.calculation = calculation;
-        this.apiCaller = apiCaller;
+        this.calculation = new Calculation();
+        this.apiCaller = new APICaller();
     }
 
     public ForecastService() {

@@ -1,5 +1,7 @@
 package com.EnergyForecasting.Model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 @Entity
@@ -8,7 +10,7 @@ public class Simulation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
-    private Long ID;
+    private Long id;
 
     //stats on region being simulated
     private ArrayList<String> regions;
@@ -29,7 +31,7 @@ public class Simulation {
     //no args alt constructor
     public Simulation() {
     }
-
+    @Autowired
     public Simulation( ArrayList<String> regions, ArrayList<String> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar) {
         //inputs from user
         this.regions = regions;
@@ -103,5 +105,11 @@ public class Simulation {
     }
     public void setCounties(ArrayList<String> counties) {
         this.counties = counties;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 }
