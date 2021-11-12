@@ -20,12 +20,6 @@ import java.util.Arrays;
 @ComponentScan({"com.EnergyForecasting.Model.Calculation"})
 @EntityScan("com.EnergyForecasting.*")
 
-//@ComponentScan({"com.EnergyForecasting.Model"})
-//@ComponentScan({"com.EnergyForecasting.Repository"})
-//@ComponentScan({"com.EnergyForecasting.Service"})
-//@ComponentScan({"com.EnergyForecasting.Exceptions"})
-//@ComponentScan({"com.EnergyForecasting.Controllers"})
-//@ComponentScan({"com.EnergyForecasting.Users"})
 
 public class EnergyForecastingApplication {
 
@@ -334,10 +328,8 @@ public class EnergyForecastingApplication {
 //			}
 //		};
 //		PlantService ps= new PlantService(pr);
-//		APICaller ac= new APICaller();
-//		Calculation cal= new Calculation();
 //
-//		ForecastService fs= new ForecastService(fr, pr, ps, cal, ac);
+//		ForecastService fs= new ForecastService(fr, pr, ps);
 //		ArrayList<String> regions= new ArrayList<String>();
 //		ArrayList<String> counties= new ArrayList<String>();
 //		counties.add("Angus");

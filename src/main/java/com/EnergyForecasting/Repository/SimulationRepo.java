@@ -7,5 +7,4 @@ public interface SimulationRepo extends JpaRepository<Simulation,Long> {
    void deleteSimulationById(Long id);
 
     Simulation findSimulationById(Long id);
-
 }
