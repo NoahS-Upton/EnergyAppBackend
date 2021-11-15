@@ -8,12 +8,14 @@ import com.EnergyForecasting.Repository.SimulationRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 @Service
+@Transactional
 @Slf4j
 public class SimulationService {
     private SimulationRepo simulationRepo;
@@ -170,16 +172,14 @@ public class SimulationService {
                     countyOffshoreCapacity+=p.getCapacity();
                 }
             }
-
-
-            if ((sim.getWindSpeed() < 25 && sim.getWindSpeed() > 5 && sim.isWind()) == true) {
+            if ((sim.getWindSpeed() < 25 && sim.getWindSpeed() > 5 && sim.isWind())) {
                 offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity,sim.getWindSpeed()));
                 onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity,sim.getWindSpeed()));
             }else{
                 offshoreProduction.add(0.00);
                 onshoreProduction.add(0.00);
             }
-            if(sim.isSolar()==true) {
+            if(sim.isSolar()) {
                 solarProduction.add(calculation.solarOutput(countySolarCapacity, sim.getWM2()));
             }
             offshoreMap.put(c,offshoreProduction);

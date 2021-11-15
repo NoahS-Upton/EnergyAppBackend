@@ -10,6 +10,7 @@ import com.EnergyForecasting.Repository.PlantRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @Service
-
+@Transactional
 public class ForecastService {
     private ForecastRepo forecastRepo;
     private PlantRepo plantRepo;
