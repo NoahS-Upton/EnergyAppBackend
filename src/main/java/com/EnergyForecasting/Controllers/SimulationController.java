@@ -46,4 +46,18 @@ public class SimulationController {
         simulationService.deleteSimulationById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/runSimulation/{id}")
+    public ResponseEntity<List<Simulation>> runSimulation(@PathVariable("id") Long id){
+        Simulation simulation = simulationService.getSimulationById(id);
+        simulationService.runSimulation(simulation);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/generateSimulation")
+    public ResponseEntity<Simulation> generateSimulation(){ ;
+
+        return new ResponseEntity<>( HttpStatus.CREATED);
+    }
+
 }

@@ -22,6 +22,11 @@ public class PlantService {
         return plantRepo.save(plant);
     }
 
+    public Plant addPlant(String name, double capacity, String type, String region, String county){
+        Plant p= new Plant(name,capacity,type,region,county);
+        return plantRepo.save(p);
+    }
+
     public List<Plant> getAllPlants(){
         return plantRepo.findAll();
     }
@@ -61,15 +66,7 @@ public class PlantService {
         }
         return temp;
     }
-    public List<Plant> getPlantsByNoOf(double maxNo, double minNo){
-        ArrayList<Plant> temp= new ArrayList<Plant>();
-        for (Plant p: getAllPlants()) {
-            if (maxNo>=p.getNoOf()&& p.getCapacity()>=minNo){
-                temp.add(p);
-            }
-        }
-        return temp;
-    }
+
 
     public Plant updatePlant(Plant plant){
         return plantRepo.save(plant);

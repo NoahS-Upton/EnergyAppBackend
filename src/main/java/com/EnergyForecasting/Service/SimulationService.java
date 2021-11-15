@@ -120,9 +120,76 @@ public class SimulationService {
             onshoreMap.put(c,onshoreProduction);
             solarMap.put(c,solarProduction);
         }
-
         simulationRepo.save(sim);
     }
+
+
+    public void runSimulation(Simulation simulation){
+        Simulation sim= simulation;
+        //gets all counties in regions and appends to county list for calulations
+        for (String r: sim.getRegions()) {
+            ArrayList<Plant> temp =getPlantByRegion(r);
+            HashSet<String> set= new HashSet<>();
+            for (Plant p: temp) {
+                set.add(p.getCounty());
+            }
+            for (String s: set) {
+                for (String c:sim.getCounties()) {
+                    if (!c.equals(s)){
+                        sim.getCounties().add(s);
+                    }
+                }
+            }
+        }
+        //hashmaps for storing arrays of outputs for each county
+        HashMap<String, ArrayList<Double>> offshoreMap= new HashMap <String, ArrayList<Double>>();
+        HashMap <String, ArrayList<Double>> onshoreMap= new HashMap <String, ArrayList<Double>>();
+        HashMap <String, ArrayList<Double>> solarMap= new HashMap <String, ArrayList<Double>>();
+
+        //total capacity for each energy type for each region
+        double countyOnshoreCapacity=0.0;
+        double countyOffshoreCapacity=0.0;
+        double countySolarCapacity=0.0;
+
+        ArrayList<Double> onshoreProduction= new ArrayList<Double>();
+        ArrayList<Double> offshoreProduction= new ArrayList<Double>();
+        ArrayList<Double> solarProduction= new ArrayList<Double>();
+
+        for (String c: sim.getCounties()) {
+
+            ArrayList<Plant> countyPlants=getPlantByCounty(c);
+
+            //gets capacities for calculations
+            for (Plant p: countyPlants) {
+                if (p.getType().equals("onshore")){
+                    countyOnshoreCapacity+=p.getCapacity();}
+                else if (p.getType().equals("offShore")){
+                    countyOffshoreCapacity+=p.getCapacity();
+                }
+                else if (p.getType().equals("solar")){
+                    countyOffshoreCapacity+=p.getCapacity();
+                }
+            }
+
+
+            if ((sim.getWindSpeed() < 25 && sim.getWindSpeed() > 5 && sim.isWind()) == true) {
+                offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity,sim.getWindSpeed()));
+                onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity,sim.getWindSpeed()));
+            }else{
+                offshoreProduction.add(0.00);
+                onshoreProduction.add(0.00);
+            }
+            if(sim.isSolar()==true) {
+                solarProduction.add(calculation.solarOutput(countySolarCapacity, sim.getWM2()));
+            }
+            offshoreMap.put(c,offshoreProduction);
+            onshoreMap.put(c,onshoreProduction);
+            solarMap.put(c,solarProduction);
+        }
+        simulationRepo.save(sim);
+    }
+
+
 }
 
 

@@ -65,7 +65,7 @@ public class ForecastService {
         return plants;
     }
 
-    public void generateNewForecast(boolean hourly, int days, ArrayList<String> region, ArrayList<String> county, boolean onshore, boolean offshore, boolean solar, String userID) throws IOException, InterruptedException {
+    public void generateForecast(boolean hourly, int days, ArrayList<String> region, ArrayList<String> county, boolean onshore, boolean offshore, boolean solar, String userID) throws IOException, InterruptedException {
         Forecast forecast= new Forecast(hourly,days,region,county,onshore,offshore,solar,userID);
         ArrayList<Plant> plants = new ArrayList<Plant>();
 
@@ -156,4 +156,6 @@ public class ForecastService {
 
         }
     }
+
+    public void runForecast(Forecast forecast){}
 }

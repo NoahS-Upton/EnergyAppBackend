@@ -47,4 +47,17 @@ public class ForecastController {
         forecastService.deleteForecast(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/runForecast/{id}")
+    public ResponseEntity<List<Forecast>> runForecast(@PathVariable("id") Long id){
+        Forecast forecast = forecastService.getForecastById(id);
+        forecastService.runForecast(forecast);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/generateForecast")
+    public ResponseEntity<Forecast> generateForecast(){ ;
+
+        return new ResponseEntity<>( HttpStatus.CREATED);
+    }
 }
