@@ -28,8 +28,7 @@ public class Forecast implements Serializable {
     private double[] regionSolarOutput;
 
     //calculation variables
-    private double[] cloudCover;
-    private double[] daylightHours;
+    private double[] WM2;
     private double[] windSpeed;
     private double[] windAngle;
     private ArrayList<CountyOutputs> countyOutputs;
@@ -47,8 +46,6 @@ public class Forecast implements Serializable {
         this.offshore = offshore;
         this.solar = solar;
         this.userID=userID;
-
-
     }
 
     //getters and setters for retrieving forecast(input variables)
@@ -120,18 +117,7 @@ public class Forecast implements Serializable {
     public void setRegionSolarOutput(double[] regionSolarOutput) {
         this.regionSolarOutput = regionSolarOutput;
     }
-    public double[] getCloudCover() {
-        return cloudCover;
-    }
-    public void setCloudCover(double[] cloudCover) {
-        this.cloudCover = cloudCover;
-    }
-    public double[] getDaylightHours() {
-        return daylightHours;
-    }
-    public void setDaylightHours(double[] daylightHours) {
-        this.daylightHours = daylightHours;
-    }
+
     public double[] getWindSpeed() {
         return windSpeed;
     }
@@ -159,8 +145,6 @@ public class Forecast implements Serializable {
                 ", userID='" + userID + '\'' +
                 ", regionWindOutput=" + Arrays.toString(regionWindOutput) +
                 ", regionSolarOutput=" + Arrays.toString(regionSolarOutput) +
-                ", cloudCover=" + Arrays.toString(cloudCover) +
-                ", daylightHours=" + Arrays.toString(daylightHours) +
                 ", windSpeed=" + Arrays.toString(windSpeed) +
                 ", windAngle=" + Arrays.toString(windAngle) +
                 ", countyOutputs=" + countyOutputs +
