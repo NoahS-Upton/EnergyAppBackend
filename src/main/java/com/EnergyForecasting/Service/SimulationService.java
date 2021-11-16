@@ -1,5 +1,6 @@
 package com.EnergyForecasting.Service;
 
+import com.EnergyForecasting.Exceptions.SimulationNotFoundException;
 import com.EnergyForecasting.Model.Calculation;
 import com.EnergyForecasting.Model.Plant;
 import com.EnergyForecasting.Model.Simulation;
@@ -46,8 +47,7 @@ public class SimulationService {
     }
 
     public Simulation getSimulationById(Long id) {
-        return simulationRepo.findSimulationById(id);
-//                .orElseThrow(() -> new SimulationNotFoundException("Simulation with ID=" + id + " not found"));
+        return simulationRepo.findSimulationById(id).orElseThrow(() -> new SimulationNotFoundException("Simulation with ID=" + id + " not found"));
     }
 
     public ArrayList<Plant> getPlantByRegion(String region){
