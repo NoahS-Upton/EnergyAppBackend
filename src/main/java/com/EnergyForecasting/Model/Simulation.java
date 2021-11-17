@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 @Entity
 public class Simulation {
     //ID to track simulation
@@ -17,8 +19,9 @@ public class Simulation {
     private ArrayList<String> counties;
 
     //energy outputs
-    private double solarOutput;
-    private double windOutput;
+    private HashMap solarOutput;
+    private HashMap onshoreOutput;
+    private HashMap offshoreOutput;
 
     //simulation criteria/constraints
     private int days;
@@ -46,18 +49,26 @@ public class Simulation {
 
 
     //getters and setters
-    public double getSolarOutput() {
+    public HashMap getSolarOutput() {
         return solarOutput;
     }
-    public void setSolarOutput(double solarOutput) {
+    public void setSolarOutput(HashMap solarOutput) {
         this.solarOutput = solarOutput;
     }
-    public double getWindOutput() {
-        return windOutput;
+    public HashMap getOnshoreOutput() {
+        return onshoreOutput;
     }
-    public void setWindOutput(double windOutput) {
-        this.windOutput = windOutput;
+    public void setOnshoreOutput(HashMap onshoreOutput) {
+        this.onshoreOutput = onshoreOutput;
     }
+    public HashMap getOffshoreOutput() {
+        return offshoreOutput;
+    }
+
+    public void setOffshoreOutput(HashMap offshoreOutput) {
+        this.offshoreOutput = offshoreOutput;
+    }
+
     public int getDays() {
         return days;
     }
