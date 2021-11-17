@@ -52,7 +52,7 @@ public class SimulationController {
     public ResponseEntity<List<Simulation>> runSimulation(@PathVariable("id") Long id){
         Simulation simulation = simulationService.getSimulationById(id);
         simulationService.runSimulation(simulation);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 
     @PostMapping("/generateSimulation")
