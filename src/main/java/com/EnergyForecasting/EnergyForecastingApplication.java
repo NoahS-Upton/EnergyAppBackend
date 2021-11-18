@@ -25,6 +25,34 @@ public class EnergyForecastingApplication {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		SpringApplication.run(EnergyForecastingApplication.class, args);
+
+//		for (int i=0; i<data.length;i++) {
+//			if(data[i].contains("windSpeedKPH")){
+//				windSpeed.add(data[i+1]);
+//			}
+//			if(data[i].contains("windDirDeg")){
+//				windDirDeg.add(data[i+1]);
+//			}
+//			if(data[i].contains("windGustKPH")){
+//				windGust.add(data[i+1]);
+//			}
+//			if(data[i].contains("windSpeedMaxKPH")){
+//				maxWindSpeed.add(data[i+1]);
+//			}
+//			if(data[i].contains("windSpeedMinKPH")){
+//				minWindSpeed.add(data[i+1]);
+//			}
+//			if(data[i].contains("solradWM2")){
+//				solarWM2.add(data[i+1]);
+//			}
+//			if(data[i].contains("avgDewpointC")){
+//				avgDewpointC.add(data[i+1]);
+//			}
+//		}
+//		System.out.println(maxWindSpeed.get(0));
+//		System.out.println(maxWindSpeed.get(1));
+//		System.out.println(maxWindSpeed.get(2));
+
 //		PlantRepo pr= new PlantRepo() {
 //			@Override
 //			public void deletePlantById(Long id) {

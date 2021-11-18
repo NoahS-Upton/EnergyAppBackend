@@ -16,8 +16,8 @@ public class Forecast implements Serializable {
     private Long id;
     private boolean hourly;
     private int days;
-    private ArrayList<String> region;
-    private ArrayList<String> county;
+    private ArrayList<String> regions;
+    private ArrayList<String> counties;
     private boolean onshore;
     private boolean offshore;
     private boolean solar;
@@ -40,8 +40,8 @@ public class Forecast implements Serializable {
     public Forecast(boolean hourly, int days,ArrayList<String>region, ArrayList<String> county, boolean onshore, boolean offshore, boolean solar, String userID) {
         this.hourly = hourly;
         this.days = days;
-        this.region = region;
-        this.county = county;
+        this.regions = region;
+        this.counties = county;
         this.onshore = onshore;
         this.offshore = offshore;
         this.solar = solar;
@@ -91,17 +91,17 @@ public class Forecast implements Serializable {
     public void setUserID(String userID) {
         this.userID = userID;
     }
-    public ArrayList<String> getRegion() {
-        return region;
+    public ArrayList<String> getRegions() {
+        return regions;
     }
-    public void setRegion(ArrayList<String> region) {
-        this.region = region;
+    public void setRegions(ArrayList<String> region) {
+        this.regions = region;
     }
-    public ArrayList<String> getCounty() {
-        return county;
+    public ArrayList<String> getCounties() {
+        return counties;
     }
-    public void setCounty(ArrayList<String> county) {
-        this.county = county;
+    public void setCounties(ArrayList<String> counties) {
+        this.counties = counties;
     }
 
     //getters and setters for forecast output variables
@@ -137,8 +137,8 @@ public class Forecast implements Serializable {
                 "id=" + id +
                 ", hourly=" + hourly +
                 ", days=" + days +
-                ", region=" + region +
-                ", county=" + county +
+                ", region=" + regions +
+                ", county=" + counties +
                 ", onshore=" + onshore +
                 ", offshore=" + offshore +
                 ", solar=" + solar +
