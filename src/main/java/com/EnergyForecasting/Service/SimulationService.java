@@ -49,6 +49,10 @@ public class SimulationService {
     public Simulation getSimulationById(Long id) {
         return simulationRepo.findSimulationById(id).orElseThrow(() -> new SimulationNotFoundException("Simulation with ID=" + id + " not found"));
     }
+    public ArrayList<Plant> getAllPlants(){
+        ArrayList<Plant> plants= (ArrayList<Plant>) plantService.getAllPlants();
+        return plants;
+    }
 
     public ArrayList<Plant> getPlantByRegion(String region){
         ArrayList<Plant> plants=plantService.getPlantsByRegion(region);
@@ -77,55 +81,55 @@ public class SimulationService {
                 }
             }
         }
-        //hashmaps for storing arrays of outputs for each county
-        HashMap<String, ArrayList<Double>> offshoreMap= new HashMap <String, ArrayList<Double>>();
-        HashMap <String, ArrayList<Double>> onshoreMap= new HashMap <String, ArrayList<Double>>();
-        HashMap <String, ArrayList<Double>> solarMap= new HashMap <String, ArrayList<Double>>();
-
-        //total capacity for each energy type for each region
-        double countyOnshoreCapacity=0.0;
-        double countyOffshoreCapacity=0.0;
-        double countySolarCapacity=0.0;
-
-        ArrayList<Double> onshoreProduction= new ArrayList<Double>();
-        ArrayList<Double> offshoreProduction= new ArrayList<Double>();
-        ArrayList<Double> solarProduction= new ArrayList<Double>();
-
-        for (String c: counties) {
-
-            ArrayList<Plant> countyPlants=getPlantByCounty(c);
-
-            //gets capacities for calculations
-             for (Plant p: countyPlants) {
-                if (p.getType().equals("onshore")){
-                    countyOnshoreCapacity+=p.getCapacity();}
-                else if (p.getType().equals("offShore")){
-                    countyOffshoreCapacity+=p.getCapacity();
-                }
-                else if (p.getType().equals("solar")){
-                    countyOffshoreCapacity+=p.getCapacity();
-                }
-            }
-
-
-            if (windSpeed < 25 && windSpeed > 5 && wind==true) {
-                offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity,windSpeed));
-                onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity,windSpeed));
-            }else{
-                offshoreProduction.add(0.00);
-                onshoreProduction.add(0.00);
-            }
-            if(solar==true) {
-                solarProduction.add(calculation.solarOutput(countySolarCapacity, wm2));
-            }
-            offshoreMap.put(c,offshoreProduction);
-            onshoreMap.put(c,onshoreProduction);
-            solarMap.put(c,solarProduction);
-
-            sim.setSolarOutput(solarMap);
-            sim.setOffshoreOutput(offshoreMap);
-            sim.setOnshoreOutput(onshoreMap);
-        }
+//        //hashmaps for storing arrays of outputs for each county
+//        HashMap<String, ArrayList<Double>> offshoreMap= new HashMap <String, ArrayList<Double>>();
+//        HashMap <String, ArrayList<Double>> onshoreMap= new HashMap <String, ArrayList<Double>>();
+//        HashMap <String, ArrayList<Double>> solarMap= new HashMap <String, ArrayList<Double>>();
+//
+//        //total capacity for each energy type for each region
+//        double countyOnshoreCapacity=0.0;
+//        double countyOffshoreCapacity=0.0;
+//        double countySolarCapacity=0.0;
+//
+//        ArrayList<Double> onshoreProduction= new ArrayList<Double>();
+//        ArrayList<Double> offshoreProduction= new ArrayList<Double>();
+//        ArrayList<Double> solarProduction= new ArrayList<Double>();
+//
+//        for (String c: counties) {
+//
+//            ArrayList<Plant> countyPlants=getPlantByCounty(c);
+//
+//            //gets capacities for calculations
+//             for (Plant p: countyPlants) {
+//                if (p.getType().equals("onshore")){
+//                    countyOnshoreCapacity+=p.getCapacity();}
+//                else if (p.getType().equals("offShore")){
+//                    countyOffshoreCapacity+=p.getCapacity();
+//                }
+//                else if (p.getType().equals("solar")){
+//                    countyOffshoreCapacity+=p.getCapacity();
+//                }
+//            }
+//
+//
+//            if (windSpeed < 25 && windSpeed > 5 && wind==true) {
+//                offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity,windSpeed));
+//                onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity,windSpeed));
+//            }else{
+//                offshoreProduction.add(0.00);
+//                onshoreProduction.add(0.00);
+//            }
+//            if(solar==true) {
+//                solarProduction.add(calculation.solarOutput(countySolarCapacity, wm2));
+//            }
+//            offshoreMap.put(c,offshoreProduction);
+//            onshoreMap.put(c,onshoreProduction);
+//            solarMap.put(c,solarProduction);
+//
+//            sim.setSolarOutput(solarMap);
+//            sim.setOffshoreOutput(offshoreMap);
+//            sim.setOnshoreOutput(onshoreMap);
+//        }
         simulationRepo.save(sim);
         return sim;
     }
@@ -133,7 +137,21 @@ public class SimulationService {
 
     public void runSimulation(Simulation simulation) {
         Simulation sim = simulation;
-        //gets all counties in regions and appends to county list for calulations
+        //gets all counties in regions and appends to county list for calculations
+        ArrayList<Plant> allPlants= getAllPlants();
+        if (sim.getRegions()==null){
+            HashSet<String> set = new HashSet<>();
+            for (Plant p : allPlants) {
+                set.add(p.getCounty());
+            }
+            for (String s : set) {
+                for (String c : sim.getCounties()) {
+                    if (!c.equals(s)) {
+                        sim.getCounties().add(s);
+                    }
+                }
+            }
+        }else{
         for (String r : sim.getRegions()) {
             ArrayList<Plant> temp = getPlantByRegion(r);
             HashSet<String> set = new HashSet<>();
@@ -148,6 +166,8 @@ public class SimulationService {
                 }
             }
         }
+        }
+
         //hashmaps for storing arrays of outputs for each county
         HashMap<String, ArrayList<Double>> offshoreMap = new HashMap<String, ArrayList<Double>>();
         HashMap<String, ArrayList<Double>> onshoreMap = new HashMap<String, ArrayList<Double>>();
