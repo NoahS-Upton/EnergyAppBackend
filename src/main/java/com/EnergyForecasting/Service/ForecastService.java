@@ -1,10 +1,9 @@
 package com.EnergyForecasting.Service;
 
 import com.EnergyForecasting.Exceptions.ForecastNotFoundException;
-import com.EnergyForecasting.Model.APICaller;
-import com.EnergyForecasting.Model.Calculation;
-import com.EnergyForecasting.Model.Forecast;
-import com.EnergyForecasting.Model.Plant;
+import com.EnergyForecasting.Model.*;
+import com.EnergyForecasting.Repository.ForecastCountyRepo;
+import com.EnergyForecasting.Repository.ForecastRegionRepo;
 import com.EnergyForecasting.Repository.ForecastRepo;
 import com.EnergyForecasting.Repository.PlantRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,18 @@ import java.util.List;
 @Transactional
 public class ForecastService {
     private ForecastRepo forecastRepo;
+    private ForecastCountyRepo forecastCountyRepo;
+    private ForecastRegionRepo forecastRegionRepo;
     private PlantRepo plantRepo;
     private PlantService plantService;
     private Calculation calculation;
     private APICaller apiCaller;
 
     @Autowired
-    public ForecastService(ForecastRepo forecastRepo, PlantRepo plantRepo, PlantService plantService) {
+    public ForecastService(ForecastRepo forecastRepo, ForecastCountyRepo forecastCountyRepo, ForecastRegionRepo forecastRegionRepo, PlantRepo plantRepo, PlantService plantService) {
         this.forecastRepo = forecastRepo;
+        this.forecastCountyRepo = forecastCountyRepo;
+        this.forecastRegionRepo = forecastRegionRepo;
         this.plantRepo = plantRepo;
         this.plantService = plantService;
         this.calculation = new Calculation();
@@ -66,21 +69,21 @@ public class ForecastService {
         return plants;
     }
 
-    public void generateForecast(boolean hourly, int days, ArrayList<String> region, ArrayList<String> county, boolean onshore, boolean offshore, boolean solar, String userID) throws IOException, InterruptedException {
+    public void generateForecast(boolean hourly, int days, RegionList region, CountyList county, boolean onshore, boolean offshore, boolean solar, String userID) throws IOException, InterruptedException {
         Forecast forecast= new Forecast(hourly,days,region,county,onshore,offshore,solar,userID);
         ArrayList<Plant> plants = new ArrayList<Plant>();
 
         //for each region, gets each subsequent county for calling apis for calculation
-        for (String r: region) {
+        for (String r: region.getRegionList()) {
             ArrayList<Plant> temp =getPlantByRegion(r);
             HashSet<String> set= new HashSet<>();
             for (Plant p: temp) {
                 set.add(p.getCounty());
             }
             for (String s: set) {
-                for (String c:county) {
+                for (String c:county.getCountyList()) {
                     if (!c.equals(s)){
-                        county.add(s);
+                        county.getCountyList().add(s);
                     }
                 }
             }
@@ -93,7 +96,7 @@ public class ForecastService {
 
 
         //calls api for each county to allow for data to be used for calculations
-        for (String c:county) {
+        for (String c:county.getCountyList()) {
             //test line
             System.out.println(c);
 
