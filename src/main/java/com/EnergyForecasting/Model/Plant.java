@@ -11,7 +11,7 @@ public class Plant implements Serializable {
     private Long id;
 
     private String name;
-    private double capacity;
+    private Double capacity;
     private String type;
     private String region;
     private String county;
@@ -20,7 +20,7 @@ public class Plant implements Serializable {
     private String longChar;
     private String longitude;
 
-    public Plant(String name,  double capacity, String type, String region, String county) {
+    public Plant(String name,  Double capacity, String type, String region, String county) {
         this.name = name;
         this.capacity = capacity;
         this.type = type;
@@ -28,7 +28,7 @@ public class Plant implements Serializable {
         this.county = county;
     }
 
-    public Plant(String name, int noOf, double capacity, String type, String region, String county, String latChar, String latitude, String longChar, String longitude) {
+    public Plant(String name, int noOf, Double capacity, String type, String region, String county, String latChar, String latitude, String longChar, String longitude) {
         this.name = name;
         this.capacity = capacity;
         this.type = type;
@@ -51,7 +51,7 @@ public class Plant implements Serializable {
     public String getName() {
         return name;
     }
-    public double getCapacity() {
+    public Double getCapacity() {
         return capacity;
     }
     public String getType() {
@@ -64,7 +64,7 @@ public class Plant implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    public void setCapacity(double capacity) {
+    public void setCapacity(Double capacity) {
         this.capacity = capacity;
     }
     public void setType(String type) {
