@@ -1,0 +1,394 @@
+Index: src/main/java/com/EnergyForecasting/Model/RegionList.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/EnergyForecasting/Model/RegionList.java	(date 1637256945862)
++++ src/main/java/com/EnergyForecasting/Model/RegionList.java	(date 1637256945862)
+@@ -0,0 +1,47 @@
++package com.EnergyForecasting.Model;
++
++import org.springframework.beans.factory.annotation.Autowired;
++
++import javax.persistence.*;
++import java.util.ArrayList;
++@Entity
++public class RegionList {
++    @Id
++    @GeneratedValue(strategy = GenerationType.AUTO)
++    @Column(nullable = false, updatable = false)
++    private Long id;
++    private Long forecastID;
++    private ArrayList<String> regionList;
++    @Autowired
++    public RegionList(Long forecastID, ArrayList<String> regionList) {
++        this.forecastID = forecastID;
++        this.regionList = regionList;
++    }
++
++    public RegionList() {
++    }
++
++    public Long getId() {
++        return id;
++    }
++
++    public void setId(Long id) {
++        this.id = id;
++    }
++
++    public Long getForecastID() {
++        return forecastID;
++    }
++
++    public void setForecastID(Long forecastID) {
++        this.forecastID = forecastID;
++    }
++
++    public ArrayList<String> getRegionList() {
++        return regionList;
++    }
++
++    public void setRegionList(ArrayList<String> regionList) {
++        this.regionList = regionList;
++    }
++}
+Index: src/main/java/com/EnergyForecasting/Model/Forecast.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/EnergyForecasting/Model/Forecast.java	(revision 5b0d31ff42cafb5aab5bc12a03b1e81dc9f95d9d)
++++ src/main/java/com/EnergyForecasting/Model/Forecast.java	(date 1637253788536)
+@@ -4,7 +4,6 @@
+ 
+ import javax.persistence.*;
+ import java.io.Serializable;
+-import java.util.ArrayList;
+ import java.util.Arrays;
+ 
+ @Entity
+@@ -16,28 +15,27 @@
+     private Long id;
+     private boolean hourly;
+     private int days;
+-    private ArrayList<String> regions;
+-    private ArrayList<String> counties;
++    private RegionList regions;
++    private CountyList counties;
+     private boolean onshore;
+     private boolean offshore;
+     private boolean solar;
+     private String userID;
+ 
+     // Outputs to screen
+-    private double[] regionWindOutput;
+-    private double[] regionSolarOutput;
++    private CountyOutputs countyOutputs;
+ 
+     //calculation variables
+     private double[] WM2;
+     private double[] windSpeed;
+     private double[] windAngle;
+-    private ArrayList<CountyOutputs> countyOutputs;
++
+ 
+     public Forecast() {
+     }
+ 
+     @Autowired
+-    public Forecast(boolean hourly, int days,ArrayList<String>region, ArrayList<String> county, boolean onshore, boolean offshore, boolean solar, String userID) {
++    public Forecast(boolean hourly, int days,RegionList region, CountyList county, boolean onshore, boolean offshore, boolean solar, String userID) {
+         this.hourly = hourly;
+         this.days = days;
+         this.regions = region;
+@@ -91,31 +89,30 @@
+     public void setUserID(String userID) {
+         this.userID = userID;
+     }
+-    public ArrayList<String> getRegions() {
++
++    public RegionList getRegions() {
+         return regions;
+     }
+-    public void setRegions(ArrayList<String> region) {
+-        this.regions = region;
++
++    public void setRegions(RegionList regions) {
++        this.regions = regions;
+     }
+-    public ArrayList<String> getCounties() {
++
++    public CountyList getCounties() {
+         return counties;
+     }
+-    public void setCounties(ArrayList<String> counties) {
++
++    public void setCounties(CountyList counties) {
+         this.counties = counties;
+     }
+ 
+     //getters and setters for forecast output variables
+-    public double[] getRegionWindOutput() {
+-        return regionWindOutput;
+-    }
+-    public void setRegionWindOutput(double[] regionWindOutput) {
+-        this.regionWindOutput = regionWindOutput;
++    public CountyOutputs getCountyOutputs() {
++        return countyOutputs;
+     }
+-    public double[] getRegionSolarOutput() {
+-        return regionSolarOutput;
+-    }
+-    public void setRegionSolarOutput(double[] regionSolarOutput) {
+-        this.regionSolarOutput = regionSolarOutput;
++
++    public void setCountyOutputs(CountyOutputs countyOutputs) {
++        this.countyOutputs = countyOutputs;
+     }
+ 
+     public double[] getWindSpeed() {
+@@ -143,8 +140,6 @@
+                 ", offshore=" + offshore +
+                 ", solar=" + solar +
+                 ", userID='" + userID + '\'' +
+-                ", regionWindOutput=" + Arrays.toString(regionWindOutput) +
+-                ", regionSolarOutput=" + Arrays.toString(regionSolarOutput) +
+                 ", windSpeed=" + Arrays.toString(windSpeed) +
+                 ", windAngle=" + Arrays.toString(windAngle) +
+                 ", countyOutputs=" + countyOutputs +
+Index: src/main/java/com/EnergyForecasting/Repository/ForecastRegionRepo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/EnergyForecasting/Repository/ForecastRegionRepo.java	(date 1637257538978)
++++ src/main/java/com/EnergyForecasting/Repository/ForecastRegionRepo.java	(date 1637257538978)
+@@ -0,0 +1,15 @@
++package com.EnergyForecasting.Repository;
++
++import com.EnergyForecasting.Model.Forecast;
++import org.springframework.stereotype.Repository;
++
++import javax.transaction.Transactional;
++import java.util.Optional;
++
++@Repository
++@Transactional
++public interface ForecastRegionRepo {
++    void deleteForecastRegionById(Long id);
++
++    Optional<Forecast> findForecastRegionById(Long id);
++}
+Index: src/main/java/com/EnergyForecasting/Service/ForecastService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/EnergyForecasting/Service/ForecastService.java	(revision 5b0d31ff42cafb5aab5bc12a03b1e81dc9f95d9d)
++++ src/main/java/com/EnergyForecasting/Service/ForecastService.java	(date 1637256526938)
+@@ -1,10 +1,9 @@
+ package com.EnergyForecasting.Service;
+ 
+ import com.EnergyForecasting.Exceptions.ForecastNotFoundException;
+-import com.EnergyForecasting.Model.APICaller;
+-import com.EnergyForecasting.Model.Calculation;
+-import com.EnergyForecasting.Model.Forecast;
+-import com.EnergyForecasting.Model.Plant;
++import com.EnergyForecasting.Model.*;
++import com.EnergyForecasting.Repository.ForecastCountyRepo;
++import com.EnergyForecasting.Repository.ForecastRegionRepo;
+ import com.EnergyForecasting.Repository.ForecastRepo;
+ import com.EnergyForecasting.Repository.PlantRepo;
+ import org.springframework.beans.factory.annotation.Autowired;
+@@ -21,14 +20,18 @@
+ @Transactional
+ public class ForecastService {
+     private ForecastRepo forecastRepo;
++    private ForecastCountyRepo forecastCountyRepo;
++    private ForecastRegionRepo forecastRegionRepo;
+     private PlantRepo plantRepo;
+     private PlantService plantService;
+     private Calculation calculation;
+     private APICaller apiCaller;
+ 
+     @Autowired
+-    public ForecastService(ForecastRepo forecastRepo, PlantRepo plantRepo, PlantService plantService) {
++    public ForecastService(ForecastRepo forecastRepo, ForecastCountyRepo forecastCountyRepo, ForecastRegionRepo forecastRegionRepo, PlantRepo plantRepo, PlantService plantService) {
+         this.forecastRepo = forecastRepo;
++        this.forecastCountyRepo = forecastCountyRepo;
++        this.forecastRegionRepo = forecastRegionRepo;
+         this.plantRepo = plantRepo;
+         this.plantService = plantService;
+         this.calculation = new Calculation();
+@@ -66,21 +69,21 @@
+         return plants;
+     }
+ 
+-    public void generateForecast(boolean hourly, int days, ArrayList<String> region, ArrayList<String> county, boolean onshore, boolean offshore, boolean solar, String userID) throws IOException, InterruptedException {
++    public void generateForecast(boolean hourly, int days, RegionList region, CountyList county, boolean onshore, boolean offshore, boolean solar, String userID) throws IOException, InterruptedException {
+         Forecast forecast= new Forecast(hourly,days,region,county,onshore,offshore,solar,userID);
+         ArrayList<Plant> plants = new ArrayList<Plant>();
+ 
+         //for each region, gets each subsequent county for calling apis for calculation
+-        for (String r: region) {
++        for (String r: region.getRegionList()) {
+             ArrayList<Plant> temp =getPlantByRegion(r);
+             HashSet<String> set= new HashSet<>();
+             for (Plant p: temp) {
+                 set.add(p.getCounty());
+             }
+             for (String s: set) {
+-                for (String c:county) {
++                for (String c:county.getCountyList()) {
+                     if (!c.equals(s)){
+-                        county.add(s);
++                        county.getCountyList().add(s);
+                     }
+                 }
+             }
+@@ -93,7 +96,7 @@
+ 
+ 
+         //calls api for each county to allow for data to be used for calculations
+-        for (String c:county) {
++        for (String c:county.getCountyList()) {
+             //test line
+             System.out.println(c);
+ 
+Index: src/main/java/com/EnergyForecasting/Model/CountyList.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/EnergyForecasting/Model/CountyList.java	(date 1637256294726)
++++ src/main/java/com/EnergyForecasting/Model/CountyList.java	(date 1637256294726)
+@@ -0,0 +1,48 @@
++package com.EnergyForecasting.Model;
++
++import org.springframework.beans.factory.annotation.Autowired;
++
++import javax.persistence.*;
++import java.util.ArrayList;
++@Entity
++public class CountyList {
++    @Id
++    @GeneratedValue(strategy = GenerationType.AUTO)
++    @Column(nullable = false, updatable = false)
++    private Long id;
++    private Long forecastID;
++    private ArrayList<String> countyList;
++
++    @Autowired
++    public CountyList(Long forecastID, ArrayList<String> countyList) {
++        this.forecastID = forecastID;
++        this.countyList = countyList;
++    }
++
++    public CountyList() {
++    }
++
++    public Long getId() {
++        return id;
++    }
++
++    public void setId(Long id) {
++        this.id = id;
++    }
++
++    public Long getForecastID() {
++        return forecastID;
++    }
++
++    public void setForecastID(Long forecastID) {
++        this.forecastID = forecastID;
++    }
++
++    public ArrayList<String> getCountyList() {
++        return countyList;
++    }
++
++    public void setCountyList(ArrayList<String> countyList) {
++        this.countyList = countyList;
++    }
++}
+Index: src/main/java/com/EnergyForecasting/Model/CountyOutputs.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/EnergyForecasting/Model/CountyOutputs.java	(revision 5b0d31ff42cafb5aab5bc12a03b1e81dc9f95d9d)
++++ src/main/java/com/EnergyForecasting/Model/CountyOutputs.java	(date 1637253788521)
+@@ -4,12 +4,48 @@
+ 
+ public class CountyOutputs {
+     private int forecastID;
+-    private String name;
++    private CountyList countyList;
+     private ArrayList<Double> offshoreOutput;
+     private ArrayList<Double> onshoreOutput;
+     private ArrayList<Double> solarOutput;
+ 
++    public CountyOutputs(int forecastID, CountyList countyList, ArrayList<Double> offshoreOutput, ArrayList<Double> onshoreOutput, ArrayList<Double> solarOutput) {
++        this.forecastID = forecastID;
++        this.countyList=countyList;
++        this.offshoreOutput = offshoreOutput;
++        this.onshoreOutput = onshoreOutput;
++        this.solarOutput = solarOutput;
++    }
++
++    public int getForecastID() {
++        return forecastID;
++    }
+ 
++    public void setForecastID(int forecastID) {
++        this.forecastID = forecastID;
++    }
+ 
++    public ArrayList<Double> getOffshoreOutput() {
++        return offshoreOutput;
++    }
+ 
++    public void setOffshoreOutput(ArrayList<Double> offshoreOutput) {
++        this.offshoreOutput = offshoreOutput;
++    }
++
++    public ArrayList<Double> getOnshoreOutput() {
++        return onshoreOutput;
++    }
++
++    public void setOnshoreOutput(ArrayList<Double> onshoreOutput) {
++        this.onshoreOutput = onshoreOutput;
++    }
++
++    public ArrayList<Double> getSolarOutput() {
++        return solarOutput;
++    }
++
++    public void setSolarOutput(ArrayList<Double> solarOutput) {
++        this.solarOutput = solarOutput;
++    }
+ }
+Index: src/main/java/com/EnergyForecasting/Repository/ForecastCountyRepo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/EnergyForecasting/Repository/ForecastCountyRepo.java	(date 1637257538986)
++++ src/main/java/com/EnergyForecasting/Repository/ForecastCountyRepo.java	(date 1637257538986)
+@@ -0,0 +1,15 @@
++package com.EnergyForecasting.Repository;
++
++import com.EnergyForecasting.Model.Forecast;
++import org.springframework.stereotype.Repository;
++
++import javax.transaction.Transactional;
++import java.util.Optional;
++
++@Repository
++@Transactional
++public interface ForecastCountyRepo {
++    void deleteForecastCountyById(Long id);
++
++    Optional<Forecast> findForecastCountyById(Long id);
++}
