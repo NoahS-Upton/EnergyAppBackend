@@ -4,25 +4,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @Entity
+@Table(name = "forecast")
+@SecondaryTable(name= "forecast_regions", pkJoinColumns = @PrimaryKeyJoinColumn(name="forecastID"))
+@SecondaryTable(name= "forecast_counties", pkJoinColumns = @PrimaryKeyJoinColumn(name="forecast_ID"))
 public class Forecast implements Serializable {
     //input variables
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name="id")
     private Long id;
+    @Column(name="hourly")
     private boolean hourly;
+    @Column(name="days")
     private int days;
-    private RegionList regions;
-    private CountyList counties;
+
+    @OneToMany
+    @JoinColumn(name = "forecastID")
+    private ArrayList<String> regions;
+    @OneToMany
+    @JoinColumn(name = "forecastID")
+    private ArrayList<String> counties;
+
+    @Column(name="onshore")
     private boolean onshore;
+    @Column(name="offshore")
     private boolean offshore;
+    @Column(name="solar")
     private boolean solar;
+    @Column(name="userID")
     private String userID;
 
     // Outputs to screen
+    @OneToMany(mappedBy = "id")
     private CountyOutputs countyOutputs;
 
     //calculation variables
@@ -35,7 +52,7 @@ public class Forecast implements Serializable {
     }
 
     @Autowired
-    public Forecast(boolean hourly, int days,RegionList region, CountyList county, boolean onshore, boolean offshore, boolean solar, String userID) {
+    public Forecast(boolean hourly, int days,ArrayList<String> region, ArrayList<String>county, boolean onshore, boolean offshore, boolean solar, String userID) {
         this.hourly = hourly;
         this.days = days;
         this.regions = region;
@@ -90,19 +107,19 @@ public class Forecast implements Serializable {
         this.userID = userID;
     }
 
-    public RegionList getRegions() {
+    public ArrayList<String> getRegions() {
         return regions;
     }
 
-    public void setRegions(RegionList regions) {
+    public void setRegions(ArrayList<String> regions) {
         this.regions = regions;
     }
 
-    public CountyList getCounties() {
+    public ArrayList<String> getCounties() {
         return counties;
     }
 
-    public void setCounties(CountyList counties) {
+    public void setCounties(ArrayList<String> counties) {
         this.counties = counties;
     }
 
@@ -126,6 +143,14 @@ public class Forecast implements Serializable {
     }
     public void setWindAngle(double[] windAngle) {
         this.windAngle = windAngle;
+    }
+
+    public double[] getWM2() {
+        return WM2;
+    }
+
+    public void setWM2(double[] WM2) {
+        this.WM2 = WM2;
     }
 
     @Override

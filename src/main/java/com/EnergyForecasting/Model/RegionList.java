@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.*;
 import java.util.ArrayList;
 @Entity
+@Table(name = "forecast_regions")
 public class RegionList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -12,6 +13,7 @@ public class RegionList {
     private Long id;
     private Long forecastID;
     private ArrayList<String> regionList;
+
     @Autowired
     public RegionList(Long forecastID, ArrayList<String> regionList) {
         this.forecastID = forecastID;

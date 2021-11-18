@@ -69,21 +69,22 @@ public class ForecastService {
         return plants;
     }
 
-    public void generateForecast(boolean hourly, int days, RegionList region, CountyList county, boolean onshore, boolean offshore, boolean solar, String userID) throws IOException, InterruptedException {
+
+    public void generateForecast(boolean hourly, int days, ArrayList<String> region, ArrayList<String> county, boolean onshore, boolean offshore, boolean solar, String userID) throws IOException, InterruptedException {
         Forecast forecast= new Forecast(hourly,days,region,county,onshore,offshore,solar,userID);
         ArrayList<Plant> plants = new ArrayList<Plant>();
 
         //for each region, gets each subsequent county for calling apis for calculation
-        for (String r: region.getRegionList()) {
+        for (String r: region) {
             ArrayList<Plant> temp =getPlantByRegion(r);
             HashSet<String> set= new HashSet<>();
             for (Plant p: temp) {
                 set.add(p.getCounty());
             }
             for (String s: set) {
-                for (String c:county.getCountyList()) {
+                for (String c:county) {
                     if (!c.equals(s)){
-                        county.getCountyList().add(s);
+                        county.add(s);
                     }
                 }
             }
@@ -96,7 +97,7 @@ public class ForecastService {
 
 
         //calls api for each county to allow for data to be used for calculations
-        for (String c:county.getCountyList()) {
+        for (String c:county) {
             //test line
             System.out.println(c);
 

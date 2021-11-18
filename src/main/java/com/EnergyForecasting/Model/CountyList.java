@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.*;
 import java.util.ArrayList;
 @Entity
+@Table(name = "forecast_counties")
 public class CountyList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
