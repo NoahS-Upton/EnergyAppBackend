@@ -6,11 +6,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "forecast")
-@SecondaryTable(name= "forecast_regions", pkJoinColumns = @PrimaryKeyJoinColumn(name="forecastID"))
-@SecondaryTable(name= "forecast_counties", pkJoinColumns = @PrimaryKeyJoinColumn(name="forecast_ID"))
 public class Forecast implements Serializable {
     //input variables
     @Id
@@ -21,14 +21,6 @@ public class Forecast implements Serializable {
     private boolean hourly;
     @Column(name="days")
     private int days;
-
-    @OneToMany
-    @JoinColumn(name = "forecastID")
-    private ArrayList<String> regions;
-    @OneToMany
-    @JoinColumn(name = "forecastID")
-    private ArrayList<String> counties;
-
     @Column(name="onshore")
     private boolean onshore;
     @Column(name="offshore")
@@ -38,9 +30,29 @@ public class Forecast implements Serializable {
     @Column(name="userID")
     private String userID;
 
+    @ManyToMany
+    @JoinTable(
+            name = "forecastRegions",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "regionID")
+    )
+    private Set<Region> forecastRegions= new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "forecastCounties",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "countyID")
+    )
+    private Set<County> forecastCounties=new HashSet<>();
+
+
+
     // Outputs to screen
-    @OneToMany(mappedBy = "id")
-    private CountyOutputs countyOutputs;
+
+    private ArrayList<Double> countyWindOutputs= new ArrayList<Double>();
+
+    private ArrayList<Double> countySolarOutputs=new ArrayList<Double>();
+
 
     //calculation variables
     private double[] WM2;
@@ -52,11 +64,11 @@ public class Forecast implements Serializable {
     }
 
     @Autowired
-    public Forecast(boolean hourly, int days,ArrayList<String> region, ArrayList<String>county, boolean onshore, boolean offshore, boolean solar, String userID) {
+    public Forecast(boolean hourly, int days, Set<Region> region, Set<County> county, boolean onshore, boolean offshore, boolean solar, String userID) {
         this.hourly = hourly;
         this.days = days;
-        this.regions = region;
-        this.counties = county;
+        this.forecastRegions = region;
+        this.forecastCounties = county;
         this.onshore = onshore;
         this.offshore = offshore;
         this.solar = solar;
@@ -64,12 +76,19 @@ public class Forecast implements Serializable {
     }
 
     //getters and setters for retrieving forecast(input variables)
+
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
+    public void setForecastId(Long id) {
+        this.id = id;
+    }
+
     public boolean isHourly() {
         return hourly;
     }
@@ -107,29 +126,40 @@ public class Forecast implements Serializable {
         this.userID = userID;
     }
 
-    public ArrayList<String> getRegions() {
-        return regions;
+    public Set<Region> getForecastRegions() {
+        return forecastRegions;
     }
 
-    public void setRegions(ArrayList<String> regions) {
-        this.regions = regions;
+    public void setForecastRegions(Set<Region> forecastRegions) {
+        this.forecastRegions = forecastRegions;
     }
 
-    public ArrayList<String> getCounties() {
-        return counties;
+    public Set<County> getForecastCounties() {
+        return forecastCounties;
     }
 
-    public void setCounties(ArrayList<String> counties) {
-        this.counties = counties;
+    public void setForecastCounties(Set<County> forecastCounties) {
+        this.forecastCounties = forecastCounties;
     }
 
     //getters and setters for forecast output variables
-    public CountyOutputs getCountyOutputs() {
-        return countyOutputs;
+
+
+
+    public ArrayList<Double> getCountyWindOutputs() {
+        return countyWindOutputs;
     }
 
-    public void setCountyOutputs(CountyOutputs countyOutputs) {
-        this.countyOutputs = countyOutputs;
+    public void setCountyWindOutputs(ArrayList<Double> countyWindOutputs) {
+        this.countyWindOutputs = countyWindOutputs;
+    }
+
+    public ArrayList<Double> getCountySolarOutputs() {
+        return countySolarOutputs;
+    }
+
+    public void setCountySolarOutputs(ArrayList<Double> countySolarOutputs) {
+        this.countySolarOutputs = countySolarOutputs;
     }
 
     public double[] getWindSpeed() {
@@ -159,15 +189,14 @@ public class Forecast implements Serializable {
                 "id=" + id +
                 ", hourly=" + hourly +
                 ", days=" + days +
-                ", region=" + regions +
-                ", county=" + counties +
+                ", region=" + forecastRegions +
+                ", county=" + forecastCounties +
                 ", onshore=" + onshore +
                 ", offshore=" + offshore +
                 ", solar=" + solar +
                 ", userID='" + userID + '\'' +
                 ", windSpeed=" + Arrays.toString(windSpeed) +
                 ", windAngle=" + Arrays.toString(windAngle) +
-                ", countyOutputs=" + countyOutputs +
                 '}';
     }
 }

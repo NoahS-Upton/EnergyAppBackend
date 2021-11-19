@@ -8,8 +8,8 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface ForecastCountyRepo {
-    void deleteForecastCountyById(Long id);
+public interface RegionRepo {
+    void deleteForecastRegionById(Long id);
 
-    Optional<Forecast> findForecastCountyById(Long id);
+    Optional<Forecast> findForecastRegionById(Long id);
 }
