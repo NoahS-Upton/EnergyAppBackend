@@ -1,13 +1,15 @@
 package com.EnergyForecasting.Controllers;
 
+import com.EnergyForecasting.Model.County;
+import com.EnergyForecasting.Model.Region;
 import com.EnergyForecasting.Model.Simulation;
 import com.EnergyForecasting.Service.SimulationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("simulation")
@@ -55,7 +57,7 @@ public class SimulationController {
     }
 
     @PostMapping("/generateSimulation")
-    public ResponseEntity<Simulation> generateSimulation(@RequestBody ArrayList<String> regions, ArrayList<String> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
+    public ResponseEntity<Simulation> generateSimulation(@RequestBody Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
         simulationService.generateSimulation(regions,counties,days,hourly, wm2,windSpeed,wind, solar);
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
