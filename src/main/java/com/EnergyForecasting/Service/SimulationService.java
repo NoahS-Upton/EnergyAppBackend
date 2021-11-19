@@ -1,19 +1,16 @@
 package com.EnergyForecasting.Service;
 
 import com.EnergyForecasting.Exceptions.SimulationNotFoundException;
-import com.EnergyForecasting.Model.Calculation;
-import com.EnergyForecasting.Model.Plant;
-import com.EnergyForecasting.Model.Simulation;
+import com.EnergyForecasting.Model.*;
+import com.EnergyForecasting.Repository.CountyRepo;
 import com.EnergyForecasting.Repository.PlantRepo;
+import com.EnergyForecasting.Repository.RegionRepo;
 import com.EnergyForecasting.Repository.SimulationRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -23,11 +20,15 @@ public class SimulationService {
     private PlantRepo plantRepo;
     private PlantService plantService;
     private Calculation calculation;
+    private RegionRepo regionRepo;
+    private CountyRepo countyRepo;
 
-    public SimulationService(SimulationRepo simulationRepo, PlantRepo plantRepo, PlantService plantService) {
+    public SimulationService(SimulationRepo simulationRepo, PlantRepo plantRepo, PlantService plantService, RegionRepo regionRepo, CountyRepo countyRepo) {
         this.simulationRepo = simulationRepo;
         this.plantRepo = plantRepo;
         this.plantService = plantService;
+        this.regionRepo = regionRepo;
+        this.countyRepo = countyRepo;
         this.calculation = new Calculation();
     }
 
@@ -63,20 +64,20 @@ public class SimulationService {
         return plants;
     }
 
-    public Simulation generateSimulation(ArrayList<String> regions, ArrayList<String> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
+    public Simulation generateSimulation(Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
         Simulation sim= new Simulation(regions,counties,days,hourly,wm2,windSpeed,wind,solar);
 
         //gets all counties in regions and appends to county list for calculations
-        for (String r: regions) {
-            ArrayList<Plant> temp =getPlantByRegion(r);
+        for (Region r: regions) {
+            ArrayList<Plant> temp =getPlantByRegion(r.getRegion());
             HashSet<String> set= new HashSet<>();
             for (Plant p: temp) {
                 set.add(p.getCounty());
             }
             for (String s: set) {
-                for (String c:counties) {
-                    if (!c.equals(s)){
-                        counties.add(s);
+                for (County c:counties) {
+                    if (!c.getCounty().equals(s)){
+                        counties.add(c);
                     }
                 }
             }
@@ -145,23 +146,23 @@ public class SimulationService {
                 set.add(p.getCounty());
             }
             for (String s : set) {
-                for (String c : sim.getCounties()) {
-                    if (!c.equals(s)) {
-                        sim.getCounties().add(s);
+                for (County c : sim.getCounties()) {
+                    if (!c.getCounty().equals(s)) {
+                        sim.getCounties().add(c);
                     }
                 }
             }
         }else{
-        for (String r : sim.getRegions()) {
-            ArrayList<Plant> temp = getPlantByRegion(r);
+        for (Region r : sim.getRegions()) {
+            ArrayList<Plant> temp = getPlantByRegion(r.getRegion());
             HashSet<String> set = new HashSet<>();
             for (Plant p : temp) {
                 set.add(p.getCounty());
             }
             for (String s : set) {
-                for (String c : sim.getCounties()) {
-                    if (!c.equals(s)) {
-                        sim.getCounties().add(s);
+                for (County c : sim.getCounties()) {
+                    if (!c.getCounty().equals(s)) {
+                        sim.getCounties().add(c);
                     }
                 }
             }
@@ -182,9 +183,9 @@ public class SimulationService {
         ArrayList<Double> offshoreProduction = new ArrayList<Double>();
         ArrayList<Double> solarProduction = new ArrayList<Double>();
 
-        for (String c : sim.getCounties()) {
+        for (County c : sim.getCounties()) {
 
-            ArrayList<Plant> countyPlants = getPlantByCounty(c);
+            ArrayList<Plant> countyPlants = getPlantByCounty(c.getCounty());
 
             //gets capacities for calculations
             for (Plant p : countyPlants) {
@@ -206,9 +207,9 @@ public class SimulationService {
             if (sim.isSolar()) {
                 solarProduction.add(calculation.solarOutput(countySolarCapacity, sim.getWM2()));
             }
-            offshoreMap.put(c, offshoreProduction);
-            onshoreMap.put(c, onshoreProduction);
-            solarMap.put(c, solarProduction);
+            offshoreMap.put(c.getCounty(), offshoreProduction);
+            onshoreMap.put(c.getCounty(), onshoreProduction);
+            solarMap.put(c.getCounty(), solarProduction);
 
             sim.setSolarOutput(solarMap);
             sim.setOffshoreOutput(offshoreMap);

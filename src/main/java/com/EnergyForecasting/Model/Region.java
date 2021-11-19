@@ -18,6 +18,9 @@ public class Region {
     @ManyToMany(mappedBy = "forecastRegions")
     private Set<Forecast> forecastSet= new HashSet<>();
 
+    @ManyToMany(mappedBy = "simulationRegions")
+    private Set<Simulation> simulationSet= new HashSet<>();
+
     @Autowired
     public Region(Long regionID, String region) {
         this.regionID = regionID;
@@ -43,5 +46,21 @@ public class Region {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public Set<Forecast> getForecastSet() {
+        return forecastSet;
+    }
+
+    public void setForecastSet(Set<Forecast> forecastSet) {
+        this.forecastSet = forecastSet;
+    }
+
+    public Set<Simulation> getSimulationSet() {
+        return simulationSet;
+    }
+
+    public void setSimulationSet(Set<Simulation> simulationSet) {
+        this.simulationSet = simulationSet;
     }
 }

@@ -3,8 +3,9 @@ package com.EnergyForecasting.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Simulation {
@@ -15,8 +16,20 @@ public class Simulation {
     private Long id;
 
     //stats on region being simulated
-    private ArrayList<String> regions;
-    private ArrayList<String> counties;
+    @ManyToMany
+    @JoinTable(
+            name = "simulationRegions",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "regionid")
+    )
+    private Set<Region> simulationRegions= new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "simulationCounties",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "countyid")
+    )
+    private Set<County> simulationCounties= new HashSet<>();
 
     //energy outputs
     private HashMap solarOutput;
@@ -35,10 +48,10 @@ public class Simulation {
     public Simulation() {
     }
     @Autowired
-    public Simulation( ArrayList<String> regions, ArrayList<String> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar) {
+    public Simulation( Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar) {
         //inputs from user
-        this.regions = regions;
-        this.counties = counties;
+        this.simulationRegions = regions;
+        this.simulationCounties= counties;
         this.days = days;
         this.hourly = hourly;
         this.WM2 = wm2;
@@ -105,18 +118,23 @@ public class Simulation {
     public void setWM2(double WM2) {
         this.WM2 = WM2;
     }
-    public ArrayList<String> getRegions() {
-        return regions;
+
+    public Set<Region> getRegions() {
+        return simulationRegions;
     }
-    public void setRegions(ArrayList<String> regions) {
-        this.regions = regions;
+
+    public void setRegions(Set<Region> simulationRegions) {
+        this.simulationRegions = simulationRegions;
     }
-    public ArrayList<String> getCounties() {
-        return counties;
+
+    public Set<County> getCounties() {
+        return simulationCounties;
     }
-    public void setCounties(ArrayList<String> counties) {
-        this.counties = counties;
+
+    public void setCounties(Set<County> simulationCounties) {
+        this.simulationCounties = simulationCounties;
     }
+
     public Long getId() {
         return id;
     }

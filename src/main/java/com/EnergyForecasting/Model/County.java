@@ -18,6 +18,9 @@ public class County {
     @ManyToMany(mappedBy = "forecastCounties")
     Set<Forecast> forecastSet= new HashSet<>();
 
+    @ManyToMany(mappedBy = "simulationCounties")
+    Set<Simulation> simulationSet= new HashSet<>();
+
     @Autowired
     public County(Long countyID, String county) {
         this.countyID = countyID;
@@ -41,5 +44,21 @@ public class County {
 
     public void setCounty(String county) {
         this.county = county;
+    }
+
+    public Set<Forecast> getForecastSet() {
+        return forecastSet;
+    }
+
+    public void setForecastSet(Set<Forecast> forecastSet) {
+        this.forecastSet = forecastSet;
+    }
+
+    public Set<Simulation> getSimulationSet() {
+        return simulationSet;
+    }
+
+    public void setSimulationSet(Set<Simulation> simulationSet) {
+        this.simulationSet = simulationSet;
     }
 }
