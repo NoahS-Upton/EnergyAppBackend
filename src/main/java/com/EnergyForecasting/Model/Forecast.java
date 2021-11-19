@@ -34,14 +34,14 @@ public class Forecast implements Serializable {
     @JoinTable(
             name = "forecastRegions",
             joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "regionID")
+            inverseJoinColumns = @JoinColumn(name = "regionid")
     )
     private Set<Region> forecastRegions= new HashSet<>();
     @ManyToMany
     @JoinTable(
             name = "forecastCounties",
             joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "countyID")
+            inverseJoinColumns = @JoinColumn(name = "countyid")
     )
     private Set<County> forecastCounties=new HashSet<>();
 

@@ -1,6 +1,7 @@
 package com.EnergyForecasting.Repository;
 
-import com.EnergyForecasting.Model.Forecast;
+import com.EnergyForecasting.Model.Region;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -8,8 +9,8 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface RegionRepo {
-    void deleteForecastRegionById(Long id);
+public interface RegionRepo extends JpaRepository<Region, Long> {
+    void deleteByRegionID(Long regionID);
 
-    Optional<Forecast> findForecastRegionById(Long id);
+    Optional<Region> findByRegionID(Long regionID);
 }

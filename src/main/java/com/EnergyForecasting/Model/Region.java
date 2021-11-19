@@ -11,7 +11,7 @@ import java.util.Set;
 public class Region {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "regionid")
     private Long regionID;
     private  String region;
 

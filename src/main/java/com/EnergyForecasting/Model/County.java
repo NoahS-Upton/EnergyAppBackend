@@ -11,7 +11,7 @@ import java.util.Set;
 public class County {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name="countyid")
     private Long countyID;
     private String county;
 
@@ -32,8 +32,8 @@ public class County {
         return countyID;
     }
 
-    public void setCountyID(Long id) {
-        this.countyID = id;
+    public void setCountyID(Long countyID) {
+        this.countyID = countyID;
     }
     public String getCounty() {
         return county;
