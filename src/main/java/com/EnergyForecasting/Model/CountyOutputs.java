@@ -1,13 +1,17 @@
 package com.EnergyForecasting.Model;
 
-import java.util.ArrayList;
-
+import javax.persistence.*;
+@Entity
+@Table(name = "forecast_county_outputs")
 public class CountyOutputs {
-    private int forecastID;
-    private String name;
-    private ArrayList<Double> offshoreOutput;
-    private ArrayList<Double> onshoreOutput;
-    private ArrayList<Double> solarOutput;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, updatable = false)
+    private Long ID;
+    private double windOutput;
+    private double solarOutput;
+
+    private Forecast forecast;
 
 
 

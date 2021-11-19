@@ -1,10 +1,9 @@
 package com.EnergyForecasting.Service;
 
 import com.EnergyForecasting.Exceptions.ForecastNotFoundException;
-import com.EnergyForecasting.Model.APICaller;
-import com.EnergyForecasting.Model.Calculation;
-import com.EnergyForecasting.Model.Forecast;
-import com.EnergyForecasting.Model.Plant;
+import com.EnergyForecasting.Model.*;
+import com.EnergyForecasting.Repository.CountyRepo;
+import com.EnergyForecasting.Repository.RegionRepo;
 import com.EnergyForecasting.Repository.ForecastRepo;
 import com.EnergyForecasting.Repository.PlantRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,23 +11,24 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
 public class ForecastService {
     private ForecastRepo forecastRepo;
+    private CountyRepo countyRepo;
+    private RegionRepo regionRepo;
     private PlantRepo plantRepo;
     private PlantService plantService;
     private Calculation calculation;
     private APICaller apiCaller;
 
     @Autowired
-    public ForecastService(ForecastRepo forecastRepo, PlantRepo plantRepo, PlantService plantService) {
+    public ForecastService(ForecastRepo forecastRepo, CountyRepo countyRepo, RegionRepo regionRepo, PlantRepo plantRepo, PlantService plantService) {
         this.forecastRepo = forecastRepo;
+        this.countyRepo = countyRepo;
+        this.regionRepo = regionRepo;
         this.plantRepo = plantRepo;
         this.plantService = plantService;
         this.calculation = new Calculation();
@@ -49,8 +49,8 @@ public class ForecastService {
     public Forecast updateForecast (Forecast forecast){
         return forecastRepo.save(forecast);
     }
-    public void deleteForecast (Long id) {
-        forecastRepo.deleteForecastById(id);
+    public void deleteForecast (Long forecastID) {
+        forecastRepo.deleteForecastById(forecastID);
     }
 
     public Forecast getForecastById (Long id){
@@ -66,21 +66,22 @@ public class ForecastService {
         return plants;
     }
 
-    public void generateForecast(boolean hourly, int days, ArrayList<String> region, ArrayList<String> county, boolean onshore, boolean offshore, boolean solar, String userID) throws IOException, InterruptedException {
+
+    public void generateForecast(boolean hourly, int days, Set<Region> region, Set<County> county, boolean onshore, boolean offshore, boolean solar, String userID) throws IOException, InterruptedException {
         Forecast forecast= new Forecast(hourly,days,region,county,onshore,offshore,solar,userID);
         ArrayList<Plant> plants = new ArrayList<Plant>();
 
         //for each region, gets each subsequent county for calling apis for calculation
-        for (String r: region) {
-            ArrayList<Plant> temp =getPlantByRegion(r);
+        for (Region r: region) {
+            ArrayList<Plant> temp =getPlantByRegion(r.getRegion());
             HashSet<String> set= new HashSet<>();
             for (Plant p: temp) {
                 set.add(p.getCounty());
             }
             for (String s: set) {
-                for (String c:county) {
+                for (County c:county) {
                     if (!c.equals(s)){
-                        county.add(s);
+                        county.add(c);
                     }
                 }
             }
@@ -93,11 +94,11 @@ public class ForecastService {
 
 
         //calls api for each county to allow for data to be used for calculations
-        for (String c:county) {
+        for (County c:county) {
             //test line
-            System.out.println(c);
+            System.out.println(c.getCounty());
 
-            ArrayList<Plant> countyPlants=getPlantByCounty(c);
+            ArrayList<Plant> countyPlants=getPlantByCounty(c.getCounty());
             //gets api data for county
             apiCaller.getForecastData(hourly,days,
                     countyPlants.get(0).getLongitude(),countyPlants.get(0).getLatitude(),
@@ -146,9 +147,9 @@ public class ForecastService {
             for (Double sr:solRad) {
                 solarProduction.add(calculation.solarOutput(countySolarCapacity,sr));
             }
-            offshoreMap.put(c,offshoreProduction);
-            onshoreMap.put(c,onshoreProduction);
-            solarMap.put(c,solarProduction);
+            offshoreMap.put(c.getCounty(),offshoreProduction);
+            onshoreMap.put(c.getCounty(),onshoreProduction);
+            solarMap.put(c.getCounty(),solarProduction);
         }
 
 
