@@ -13,6 +13,7 @@ public class Region {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false, name = "regionid")
     private Long regionID;
+
     private  String region;
 
     @ManyToMany(mappedBy = "forecastRegions")
@@ -22,8 +23,7 @@ public class Region {
     private Set<Simulation> simulationSet= new HashSet<>();
 
     @Autowired
-    public Region(Long regionID, String region) {
-        this.regionID = regionID;
+    public Region(String region) {
         this.region = region;
     }
 

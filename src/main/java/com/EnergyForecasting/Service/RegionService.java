@@ -4,9 +4,12 @@ import com.EnergyForecasting.Exceptions.RegionNotFoundException;
 import com.EnergyForecasting.Model.Region;
 import com.EnergyForecasting.Repository.RegionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
-
+@Service
+@Transactional
 public class RegionService {
     private RegionRepo regionRepo;
 
@@ -15,8 +18,9 @@ public class RegionService {
         this.regionRepo = regionRepo;
     }
 
-    public Region saveCounty(Region region){
-        return regionRepo.save(region);
+    public Region addRegion(String region){
+        Region reg=new Region(region);
+        return regionRepo.save(reg);
     }
 
     public List<Region> getAllRegions() {
@@ -30,7 +34,7 @@ public class RegionService {
         regionRepo.deleteByRegionID(regionID);
     }
 
-    public Region getByRegionID(Long regionID){
+    public Region getRegionByRegionID(Long regionID){
         return regionRepo.findByRegionID(regionID).orElseThrow(() -> new RegionNotFoundException("Forecast with ID=" + regionID + " not found"));
     }
 }
