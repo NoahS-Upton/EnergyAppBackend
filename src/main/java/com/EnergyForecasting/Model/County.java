@@ -22,8 +22,7 @@ public class County {
     Set<Simulation> simulationSet= new HashSet<>();
 
     @Autowired
-    public County(Long countyID, String county) {
-        this.countyID = countyID;
+    public County(String county) {
         this.county = county;
     }
 

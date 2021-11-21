@@ -4,9 +4,14 @@ import com.EnergyForecasting.Exceptions.CountyNotFoundException;
 import com.EnergyForecasting.Model.County;
 import com.EnergyForecasting.Repository.CountyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
+
+@Service
+@Transactional
 public class CountyService {
     private CountyRepo countyRepo;
 
@@ -15,7 +20,7 @@ public class CountyService {
         this.countyRepo = countyRepo;
     }
 
-    public County saveCounty(County county){
+    public County addCounty(County county){
         return countyRepo.save(county);
     }
 
