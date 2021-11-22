@@ -25,7 +25,7 @@ public class PlantController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Plant> addPlant(String name, double capacity, String type, String region, String county){
+    public ResponseEntity<Plant> addPlant(String name, Double capacity, String type, String region, String county){
         Plant addedPlant= plantService.addPlant(name,capacity,type,region, county);
         return new ResponseEntity<>(addedPlant, HttpStatus.CREATED);
     }

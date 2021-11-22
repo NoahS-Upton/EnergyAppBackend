@@ -24,7 +24,7 @@ public class PlantService {
         return plantRepo.save(plant);
     }
 
-    public Plant addPlant(String name, double capacity, String type, String region, String county){
+    public Plant addPlant(String name, Double capacity, String type, String region, String county){
         Plant p= new Plant(name,capacity,type,region,county);
         return plantRepo.save(p);
     }
