@@ -16,6 +16,8 @@ public class Region {
 
     private  String region;
 
+
+
     @ManyToMany(mappedBy = "forecastRegions")
     private Set<Forecast> forecastSet= new HashSet<>();
 
@@ -27,10 +29,8 @@ public class Region {
         this.region = region;
     }
 
-
-
-
-
+    public Region() {
+    }
 
     public Long getRegionID() {
         return regionID;
