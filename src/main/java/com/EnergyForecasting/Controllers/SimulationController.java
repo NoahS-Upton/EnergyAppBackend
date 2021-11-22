@@ -31,6 +31,11 @@ public class SimulationController {
         Simulation simulation = simulationService.getSimulationById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @GetMapping("/rerun/{id}")
+    public ResponseEntity<?> rerunSimulation(@PathVariable("id") Long id){
+        simulationService.getSimulationById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @PostMapping("/add")
     public ResponseEntity<Simulation> addSimulation(@RequestBody Simulation s){

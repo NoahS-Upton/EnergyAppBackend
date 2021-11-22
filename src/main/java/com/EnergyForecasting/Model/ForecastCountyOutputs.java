@@ -3,7 +3,7 @@ package com.EnergyForecasting.Model;
 import javax.persistence.*;
 @Entity
 @Table(name = "forecast_county_outputs")
-public class CountyOutputs {
+public class ForecastCountyOutputs {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)

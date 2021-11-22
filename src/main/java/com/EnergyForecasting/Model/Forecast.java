@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -49,9 +48,9 @@ public class Forecast implements Serializable {
 
     // Outputs to screen
 
-    private ArrayList<Double> countyWindOutputs= new ArrayList<Double>();
+    private Set<ForecastCountyOutputs> countyOutputs= new HashSet<>();
 
-    private ArrayList<Double> countySolarOutputs=new ArrayList<Double>();
+
 
 
     //calculation variables
@@ -145,21 +144,12 @@ public class Forecast implements Serializable {
     //getters and setters for forecast output variables
 
 
-
-    public ArrayList<Double> getCountyWindOutputs() {
-        return countyWindOutputs;
+    public Set<ForecastCountyOutputs> getCountyOutputs() {
+        return countyOutputs;
     }
 
-    public void setCountyWindOutputs(ArrayList<Double> countyWindOutputs) {
-        this.countyWindOutputs = countyWindOutputs;
-    }
-
-    public ArrayList<Double> getCountySolarOutputs() {
-        return countySolarOutputs;
-    }
-
-    public void setCountySolarOutputs(ArrayList<Double> countySolarOutputs) {
-        this.countySolarOutputs = countySolarOutputs;
+    public void setCountyOutputs(Set<ForecastCountyOutputs> countyOutputs) {
+        this.countyOutputs = countyOutputs;
     }
 
     public double[] getWindSpeed() {
