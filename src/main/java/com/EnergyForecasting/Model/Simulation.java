@@ -31,6 +31,12 @@ public class Simulation {
     )
     private Set<County> simulationCounties= new HashSet<>();
 
+    @ManyToOne
+    @JoinTable()
+
+
+
+
     //energy outputs
     private HashMap solarOutput;
     private HashMap onshoreOutput;
