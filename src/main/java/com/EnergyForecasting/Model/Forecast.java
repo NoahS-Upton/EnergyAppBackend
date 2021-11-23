@@ -48,7 +48,7 @@ public class Forecast implements Serializable {
 
     // Outputs to screen
 
-    private Set<ForecastCountyOutputs> countyOutputs= new HashSet<>();
+    //private Set<ForecastCountyOutputs> countyOutputs= new HashSet<>();
 
 
 
@@ -144,13 +144,13 @@ public class Forecast implements Serializable {
     //getters and setters for forecast output variables
 
 
-    public Set<ForecastCountyOutputs> getCountyOutputs() {
-        return countyOutputs;
-    }
-
-    public void setCountyOutputs(Set<ForecastCountyOutputs> countyOutputs) {
-        this.countyOutputs = countyOutputs;
-    }
+//    public Set<ForecastCountyOutputs> getCountyOutputs() {
+//        return countyOutputs;
+//    }
+//
+//    public void setCountyOutputs(Set<ForecastCountyOutputs> countyOutputs) {
+//        this.countyOutputs = countyOutputs;
+//    }
 
     public double[] getWindSpeed() {
         return windSpeed;

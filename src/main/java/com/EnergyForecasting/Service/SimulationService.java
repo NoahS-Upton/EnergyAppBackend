@@ -64,7 +64,7 @@ public class SimulationService {
         return plants;
     }
 
-    public Simulation generateSimulation(Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
+    public Simulation advancedSimulation(Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
         Simulation sim= new Simulation(regions,counties,days,hourly,wm2,windSpeed,wind,solar);
 
         //gets all counties in regions and appends to county list for calculations
@@ -82,149 +82,16 @@ public class SimulationService {
                 }
             }
         }
-//        //hashmaps for storing arrays of outputs for each county
-//        HashMap<String, ArrayList<Double>> offshoreMap= new HashMap <String, ArrayList<Double>>();
-//        HashMap <String, ArrayList<Double>> onshoreMap= new HashMap <String, ArrayList<Double>>();
-//        HashMap <String, ArrayList<Double>> solarMap= new HashMap <String, ArrayList<Double>>();
-//
-//        //total capacity for each energy type for each region
-//        double countyOnshoreCapacity=0.0;
-//        double countyOffshoreCapacity=0.0;
-//        double countySolarCapacity=0.0;
-//
-//        ArrayList<Double> onshoreProduction= new ArrayList<Double>();
-//        ArrayList<Double> offshoreProduction= new ArrayList<Double>();
-//        ArrayList<Double> solarProduction= new ArrayList<Double>();
-//
-//        for (String c: counties) {
-//
-//            ArrayList<Plant> countyPlants=getPlantByCounty(c);
-//
-//            //gets capacities for calculations
-//             for (Plant p: countyPlants) {
-//                if (p.getType().equals("onshore")){
-//                    countyOnshoreCapacity+=p.getCapacity();}
-//                else if (p.getType().equals("offShore")){
-//                    countyOffshoreCapacity+=p.getCapacity();
-//                }
-//                else if (p.getType().equals("solar")){
-//                    countyOffshoreCapacity+=p.getCapacity();
-//                }
-//            }
-//
-//
-//            if (windSpeed < 25 && windSpeed > 5 && wind==true) {
-//                offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity,windSpeed));
-//                onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity,windSpeed));
-//            }else{
-//                offshoreProduction.add(0.00);
-//                onshoreProduction.add(0.00);
-//            }
-//            if(solar==true) {
-//                solarProduction.add(calculation.solarOutput(countySolarCapacity, wm2));
-//            }
-//            offshoreMap.put(c,offshoreProduction);
-//            onshoreMap.put(c,onshoreProduction);
-//            solarMap.put(c,solarProduction);
-//
-//            sim.setSolarOutput(solarMap);
-//            sim.setOffshoreOutput(offshoreMap);
-//            sim.setOnshoreOutput(onshoreMap);
-//        }
         simulationRepo.save(sim);
+        runSimulation(sim);
         return sim;
     }
 
 
-    public void runSimulation(Simulation simulation) {
-        if (simulation.getOffshoreOutput() != null || simulation.getOnshoreOutput() != null || simulation.getSolarOutput() != null) {
-            rerunSimulation(simulation.getId());
-        } else {
-            Simulation sim = simulation;
-            //gets all counties in regions and appends to county list for calculations
-            ArrayList<Plant> allPlants = getAllPlants();
-            if (sim.getRegions() == null) {
-                HashSet<String> set = new HashSet<>();
-                for (Plant p : allPlants) {
-                    set.add(p.getCounty());
-                }
-                for (String s : set) {
-                    for (County c : sim.getCounties()) {
-                        if (!c.getCounty().equals(s)) {
-                            sim.getCounties().add(c);
-                        }
-                    }
-                }
-            } else {
-                for (Region r : sim.getRegions()) {
-                    ArrayList<Plant> temp = getPlantByRegion(r.getRegion());
-                    HashSet<String> set = new HashSet<>();
-                    for (Plant p : temp) {
-                        set.add(p.getCounty());
-                    }
-                    for (String s : set) {
-                        for (County c : sim.getCounties()) {
-                            if (!c.getCounty().equals(s)) {
-                                sim.getCounties().add(c);
-                            }
-                        }
-                    }
-                }
-            }
+    public SimulationOutput runSimulation(Simulation simulation) {
+        Simulation sim = simulation;
 
-            //hashmaps for storing arrays of outputs for each county
-            HashMap<String, ArrayList<Double>> offshoreMap = new HashMap<String, ArrayList<Double>>();
-            HashMap<String, ArrayList<Double>> onshoreMap = new HashMap<String, ArrayList<Double>>();
-            HashMap<String, ArrayList<Double>> solarMap = new HashMap<String, ArrayList<Double>>();
-
-            //total capacity for each energy type for each region
-            double countyOnshoreCapacity = 0.0;
-            double countyOffshoreCapacity = 0.0;
-            double countySolarCapacity = 0.0;
-
-            ArrayList<Double> onshoreProduction = new ArrayList<Double>();
-            ArrayList<Double> offshoreProduction = new ArrayList<Double>();
-            ArrayList<Double> solarProduction = new ArrayList<Double>();
-
-            for (County c : sim.getCounties()) {
-
-                ArrayList<Plant> countyPlants = getPlantByCounty(c.getCounty());
-
-                //gets capacities for calculations
-                for (Plant p : countyPlants) {
-                    if (p.getType().equals("onshore")) {
-                        countyOnshoreCapacity += p.getCapacity();
-                    } else if (p.getType().equals("offShore")) {
-                        countyOffshoreCapacity += p.getCapacity();
-                    } else if (p.getType().equals("solar")) {
-                        countyOffshoreCapacity += p.getCapacity();
-                    }
-                }
-                if ((sim.getWindSpeed() < 25 && sim.getWindSpeed() > 5 && sim.isWind())) {
-                    offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity, sim.getWindSpeed()));
-                    onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity, sim.getWindSpeed()));
-                } else {
-                    offshoreProduction.add(0.00);
-                    onshoreProduction.add(0.00);
-                }
-                if (sim.isSolar()) {
-                    solarProduction.add(calculation.solarOutput(countySolarCapacity, sim.getWM2()));
-                }
-                offshoreMap.put(c.getCounty(), offshoreProduction);
-                onshoreMap.put(c.getCounty(), onshoreProduction);
-                solarMap.put(c.getCounty(), solarProduction);
-
-                sim.setSolarOutput(solarMap);
-                sim.setOffshoreOutput(offshoreMap);
-                sim.setOnshoreOutput(onshoreMap);
-            }
-            simulationRepo.save(sim);
-        }
-    }
-    //takes previous generated simulation and reruns it to return values to screen
-    public SimulationOutput rerunSimulation(Long id){
         //instantiate variables for creating output entity
-        Simulation sim=getSimulationById(id);
         ArrayList<String> counties=new ArrayList<String>();
         ArrayList<String> regions=new ArrayList<String>();
         int intervals=0;
@@ -291,13 +158,17 @@ public class SimulationService {
             solarProduction.clear();
         }
 
-
-        SimulationOutput simOut= new SimulationOutput(counties,regions, intervals, solarOutputs,offShoreOutputs, onShoreOutputs);
-        return simOut;
+            SimulationOutput simOut= new SimulationOutput(counties,regions, intervals, solarOutputs,offShoreOutputs, onShoreOutputs);
+            simulationRepo.save(sim);
+            return simOut;
     }
 
 
-
+    //takes previous generated simulation and reruns it to return values to screen
+    public SimulationOutput rerunSimulation(Long id){
+        Simulation sim=getSimulationById(id);
+       return runSimulation(sim);
+    }
 }
 
 

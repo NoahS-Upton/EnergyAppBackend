@@ -3,7 +3,6 @@ package com.EnergyForecasting.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,16 +30,6 @@ public class Simulation {
     )
     private Set<County> simulationCounties= new HashSet<>();
 
-    @ManyToOne
-    @JoinTable()
-
-
-
-
-    //energy outputs
-    private HashMap solarOutput;
-    private HashMap onshoreOutput;
-    private HashMap offshoreOutput;
 
     //simulation criteria/constraints
     private int days;
@@ -66,27 +55,6 @@ public class Simulation {
         this.solar = solar;
     }
 
-
-    //getters and setters
-    public HashMap getSolarOutput() {
-        return solarOutput;
-    }
-    public void setSolarOutput(HashMap solarOutput) {
-        this.solarOutput = solarOutput;
-    }
-    public HashMap getOnshoreOutput() {
-        return onshoreOutput;
-    }
-    public void setOnshoreOutput(HashMap onshoreOutput) {
-        this.onshoreOutput = onshoreOutput;
-    }
-    public HashMap getOffshoreOutput() {
-        return offshoreOutput;
-    }
-
-    public void setOffshoreOutput(HashMap offshoreOutput) {
-        this.offshoreOutput = offshoreOutput;
-    }
 
     public int getDays() {
         return days;
