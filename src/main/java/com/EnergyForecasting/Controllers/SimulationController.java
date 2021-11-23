@@ -35,7 +35,7 @@ public class SimulationController {
     @GetMapping("/rerun/{id}")
     public ResponseEntity<SimulationOutput> rerunSimulation(@PathVariable("id") Long id){
         SimulationOutput simulationOutput=simulationService.rerunSimulation(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(simulationOutput,HttpStatus.OK);
     }
 
     @PostMapping("/add")
@@ -56,14 +56,14 @@ public class SimulationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/runSimulation")
+    @GetMapping("/runSimulation")
     public ResponseEntity<SimulationOutput> runSimulation(@RequestBody Simulation simulation){
-        simulationService.runSimulation(simulation);
-        return new ResponseEntity<>( HttpStatus.OK);
+        SimulationOutput  simulationOutput=simulationService.runSimulation(simulation);
+        return new ResponseEntity<>(simulationOutput, HttpStatus.OK);
     }
 
     @PostMapping("/advancedSimulation")
-    public ResponseEntity<Simulation> generateSimulation(@RequestBody Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
+    public ResponseEntity<Simulation> advancedSimulation(@RequestBody Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
         simulationService.advancedSimulation(regions,counties,days,hourly, wm2,windSpeed,wind, solar);
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
