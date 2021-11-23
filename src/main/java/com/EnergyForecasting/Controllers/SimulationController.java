@@ -27,7 +27,7 @@ public class SimulationController {
         return new ResponseEntity<>(simulations, HttpStatus.OK);
     }
 
-    @GetMapping("/getSimulation")
+    @GetMapping("/getSimulation/{id}")
     public ResponseEntity<List<Simulation>> getSimulationById(@PathVariable("id") Long id){
         Simulation simulation = simulationService.getSimulationById(id);
         return new ResponseEntity<>(HttpStatus.OK);
