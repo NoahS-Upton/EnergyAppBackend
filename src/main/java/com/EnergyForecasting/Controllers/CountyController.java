@@ -22,19 +22,19 @@ public class CountyController {
 
     @GetMapping("/all")
     public ResponseEntity<List<County>> getAllCounties(){
-        List<County> countys= countyService.getAllCounties();
-        return new ResponseEntity<>(countys, HttpStatus.OK);
+        List<County> counties= countyService.getAllCounties();
+        return new ResponseEntity<>(counties, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<County> addCounty(County county){
+    public ResponseEntity<County> addCounty(String county){
         County addedCounty= countyService.addCounty(county);
         return new ResponseEntity<County>(addedCounty, HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<County> updateCounty(@RequestBody County r){
-        County updatedCounty= countyService.updateCounty(r);
+    public ResponseEntity<County> updateCounty(@RequestBody County c){
+        County updatedCounty= countyService.updateCounty(c);
         return new ResponseEntity<>(updatedCounty, HttpStatus.OK);
     }
 

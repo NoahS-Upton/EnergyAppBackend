@@ -53,7 +53,7 @@ public class SimulationService {
         return simulationRepo.findSimulationById(id).orElseThrow(() -> new SimulationNotFoundException("Simulation with ID=" + id + " not found"));
     }
     public County findByCountyID(Long countyID) {
-        return countyRepo.findByCountyID(countyID).orElseThrow(() -> new CountyNotFoundException("County with ID=" +countyID + " not found"));
+        return countyRepo.findByCountyID(countyID).orElseThrow(() -> new CountyNotFoundException("County with ID=" + countyID + " not found"));
     }
     public Region findByRegionID(Long regionID) {
         return regionRepo.findByRegionID(regionID).orElseThrow(() -> new RegionNotFoundException("Region with ID=" + regionID + " not found"));
@@ -104,9 +104,9 @@ public class SimulationService {
         ArrayList<String> counties=new ArrayList<String>();
         ArrayList<String> regions=new ArrayList<String>();
         int intervals=0;
-        HashMap<String, ArrayList<Double>> solarOutputs = null;
-        HashMap<String, ArrayList<Double>> offShoreOutputs=null;
-        HashMap<String, ArrayList<Double>> onShoreOutputs=null;
+        HashMap<String, ArrayList<Double>> solarOutputs = new HashMap<String, ArrayList<Double>>();
+        HashMap<String, ArrayList<Double>> offShoreOutputs = new HashMap<String, ArrayList<Double>>();
+        HashMap<String, ArrayList<Double>> onShoreOutputs = new HashMap<String, ArrayList<Double>>();
 
         for (County c: sim.getCounties()) {
             counties.add(c.getCounty());

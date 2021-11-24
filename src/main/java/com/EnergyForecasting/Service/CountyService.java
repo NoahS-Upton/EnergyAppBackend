@@ -20,8 +20,9 @@ public class CountyService {
         this.countyRepo = countyRepo;
     }
 
-    public County addCounty(County county){
-        return countyRepo.save(county);
+    public County addCounty(String county){
+        County coun=new County(county);
+        return countyRepo.save(coun);
     }
 
     public List<County> getAllCounties() {
@@ -35,7 +36,7 @@ public class CountyService {
         countyRepo.deleteByCountyID(countyID);
     }
 
-    public County findByCountyID(Long countyID){
-        return countyRepo.findByCountyID(countyID).orElseThrow(() -> new CountyNotFoundException("Forecast with ID=" + countyID + " not found"));
+    public County getCountyByCountyID(Long countyID){
+        return countyRepo.findByCountyID(countyID).orElseThrow(() -> new CountyNotFoundException("County with ID=" + countyID + " not found"));
     }
 }

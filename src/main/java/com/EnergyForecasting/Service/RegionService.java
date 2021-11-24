@@ -35,6 +35,6 @@ public class RegionService {
     }
 
     public Region getRegionByRegionID(Long regionID){
-        return regionRepo.findByRegionID(regionID).orElseThrow(() -> new RegionNotFoundException("Forecast with ID=" + regionID + " not found"));
+        return regionRepo.findByRegionID(regionID).orElseThrow(() -> new RegionNotFoundException("Region with ID=" + regionID + " not found"));
     }
 }

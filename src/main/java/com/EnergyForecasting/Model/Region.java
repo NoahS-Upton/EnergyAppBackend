@@ -14,13 +14,12 @@ public class Region {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false, name = "regionid")
     private Long regionID;
-
-    private  String region;
-
+    private String region;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "forecastRegions")
     private Set<Forecast> forecastSet= new HashSet<>();
+
     @JsonIgnore
     @ManyToMany(mappedBy = "simulationRegions")
     private Set<Simulation> simulationSet= new HashSet<>();

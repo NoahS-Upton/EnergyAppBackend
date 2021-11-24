@@ -18,17 +18,16 @@ public class County {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "forecastCounties")
-    Set<Forecast> forecastSet= new HashSet<>();
+    private Set<Forecast> forecastSet= new HashSet<>();
 
     @JsonIgnore
     @ManyToMany(mappedBy = "simulationCounties")
-    Set<Simulation> simulationSet= new HashSet<>();
+    private Set<Simulation> simulationSet= new HashSet<>();
 
     @Autowired
     public County(String county) {
         this.county = county;
     }
-
 
     public County() {
     }
