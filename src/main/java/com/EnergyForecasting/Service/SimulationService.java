@@ -92,8 +92,8 @@ public class SimulationService {
         ArrayList<String> regions=new ArrayList<String>();
         int intervals=0;
         HashMap<String, ArrayList<Double>> solarOutputs = new HashMap<String, ArrayList<Double>>();
-        HashMap<String, ArrayList<Double>> offShoreOutputs = new HashMap<String, ArrayList<Double>>();
-        HashMap<String, ArrayList<Double>> onShoreOutputs = new HashMap<String, ArrayList<Double>>();
+        HashMap<String, ArrayList<Double>> offshoreOutputs = new HashMap<String, ArrayList<Double>>();
+        HashMap<String, ArrayList<Double>> onshoreOutputs = new HashMap<String, ArrayList<Double>>();
 
         //takes county/region name and appends to array for output
         for (County c: sim.getCounties()) {
@@ -164,14 +164,22 @@ public class SimulationService {
             }
 
 
-            // capacities are working, need to now check why calculations aren't working,
+            solarOutputs.put(s, new ArrayList<Double>());
+            offshoreOutputs.put(s, new ArrayList<Double>());
+            onshoreOutputs.put(s, new ArrayList<Double>());
 
 
+            for (Double d: solarProduction) {
+                solarOutputs.get(s).add(d);
+            }
+            for (Double d: offshoreProduction) {
+                offshoreOutputs.get(s).add(d);
+            }
+            for (Double d: onshoreProduction) {
+                onshoreOutputs.get(s).add(d);
+            }
 
-
-            solarOutputs.put(s, solarProduction);
-            offShoreOutputs.put(s, offshoreProduction);
-            onShoreOutputs.put(s, onshoreProduction);
+            System.out.println(onshoreOutputs.get(s).get(0));
 
             //reset variables
             countyOnshoreCapacity = 0.0;
@@ -182,7 +190,7 @@ public class SimulationService {
             solarProduction.clear();
         }
 
-        SimulationOutput simOut= new SimulationOutput(counties,regions, intervals, solarOutputs,offShoreOutputs, onShoreOutputs);
+        SimulationOutput simOut= new SimulationOutput(counties,regions, intervals, solarOutputs,offshoreOutputs, onshoreOutputs);
         simulationRepo.save(sim);
         return simOut;
     }
