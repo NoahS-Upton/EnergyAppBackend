@@ -122,4 +122,8 @@ public class Simulation {
     public void assignCounty(County county) {
         simulationCounties.add(county);
     }
+
+    public void assignRegion(Region region) {
+        simulationRegions.add(region);
+    }
 }

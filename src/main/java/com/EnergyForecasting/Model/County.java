@@ -20,7 +20,7 @@ public class County {
     @ManyToMany(mappedBy = "forecastCounties")
     Set<Forecast> forecastSet= new HashSet<>();
 
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "simulationCounties")
     Set<Simulation> simulationSet= new HashSet<>();
 

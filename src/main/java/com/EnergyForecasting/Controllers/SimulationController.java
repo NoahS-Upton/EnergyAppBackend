@@ -75,4 +75,13 @@ public class SimulationController {
         simulation.assignCounty(county);
         return simulationService.saveSimulation(simulation);
     }
+
+    @PutMapping("/{simulationID}/region/{regionID}")
+    public Simulation assignRegionToSimulation(@PathVariable Long simulationID, @PathVariable Long regionID){
+        Simulation simulation = simulationService.getSimulationById(simulationID);
+        Region region=simulationService.findByRegionID(regionID);
+        simulation.assignRegion(region);
+        return simulationService.saveSimulation(simulation);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.EnergyForecasting.Service;
 
 import com.EnergyForecasting.Exceptions.CountyNotFoundException;
+import com.EnergyForecasting.Exceptions.RegionNotFoundException;
 import com.EnergyForecasting.Exceptions.SimulationNotFoundException;
 import com.EnergyForecasting.Model.*;
 import com.EnergyForecasting.Repository.CountyRepo;
@@ -51,8 +52,11 @@ public class SimulationService {
     public Simulation getSimulationById(Long id) {
         return simulationRepo.findSimulationById(id).orElseThrow(() -> new SimulationNotFoundException("Simulation with ID=" + id + " not found"));
     }
-    public County findByCountyID(Long id) {
-        return countyRepo.findByCountyID(id).orElseThrow(() -> new CountyNotFoundException("Simulation with ID=" + id + " not found"));
+    public County findByCountyID(Long countyID) {
+        return countyRepo.findByCountyID(countyID).orElseThrow(() -> new CountyNotFoundException("County with ID=" +countyID + " not found"));
+    }
+    public Region findByRegionID(Long regionID) {
+        return regionRepo.findByRegionID(regionID).orElseThrow(() -> new RegionNotFoundException("Region with ID=" + regionID + " not found"));
     }
 
     public ArrayList<Plant> getAllPlants(){
