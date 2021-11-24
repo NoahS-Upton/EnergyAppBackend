@@ -116,8 +116,11 @@ public class SimulationService {
             }
         }
         for (String s: set) {
+            if(!counties.contains(s)){
             counties.add(s);
+            }
         }
+
         //calculates increments of simulation
         if (sim.isHourly()){
             intervals=sim.getDays()*24;
