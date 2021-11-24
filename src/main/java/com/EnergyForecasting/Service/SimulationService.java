@@ -139,17 +139,16 @@ public class SimulationService {
         ArrayList<Double> offshoreProduction = new ArrayList<Double>();
         ArrayList<Double> solarProduction = new ArrayList<Double>();
 
-
         for (String s : counties) {
             ArrayList<Plant> countyPlants = getPlantByCounty(s);
 
             //gets capacities for calculations
             for (Plant p : countyPlants) {
-                if (p.getType().equals("onshore")) {
+                if (p.getType().equalsIgnoreCase("onshore")) {
                     countyOnshoreCapacity += p.getCapacity();
-                } else if (p.getType().equals("offShore")) {
+                } else if (p.getType().equalsIgnoreCase("offshore")) {
                     countyOffshoreCapacity += p.getCapacity();
-                } else if (p.getType().equals("solar")) {
+                } else if (p.getType().equalsIgnoreCase("solar")) {
                     countyOffshoreCapacity += p.getCapacity();
                 }
             }
@@ -164,6 +163,12 @@ public class SimulationService {
                 solarProduction.add(calculation.solarOutput(countySolarCapacity, sim.getWM2()));
             }
 
+
+            // capacities are working, need to now check why calculations aren/t working
+
+
+
+
             solarOutputs.put(s, solarProduction);
             offShoreOutputs.put(s, offshoreProduction);
             onShoreOutputs.put(s, onshoreProduction);
@@ -177,9 +182,9 @@ public class SimulationService {
             solarProduction.clear();
         }
 
-            SimulationOutput simOut= new SimulationOutput(counties,regions, intervals, solarOutputs,offShoreOutputs, onShoreOutputs);
-            simulationRepo.save(sim);
-            return simOut;
+        SimulationOutput simOut= new SimulationOutput(counties,regions, intervals, solarOutputs,offShoreOutputs, onShoreOutputs);
+        simulationRepo.save(sim);
+        return simOut;
     }
 
 
