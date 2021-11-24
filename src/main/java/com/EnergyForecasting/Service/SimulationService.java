@@ -69,7 +69,7 @@ public class SimulationService {
         return plants;
     }
     public ArrayList<Plant> getPlantByCounty(String county){
-        ArrayList<Plant> plants=plantService.getPlantsByRegion(county);
+        ArrayList<Plant> plants=plantService.getPlantsByCounty(county);
         return plants;
     }
 
@@ -77,20 +77,7 @@ public class SimulationService {
         Simulation sim= new Simulation(regions,counties,days,hourly,wm2,windSpeed,wind,solar);
 
         //gets all counties in regions and appends to county list for calculations
-        for (Region r: regions) {
-            ArrayList<Plant> temp =getPlantByRegion(r.getRegion());
-            HashSet<String> set= new HashSet<>();
-            for (Plant p: temp) {
-                set.add(p.getCounty());
-            }
-            for (String s: set) {
-                for (County c:counties) {
-                    if (!c.getCounty().equals(s)){
-                        counties.add(c);
-                    }
-                }
-            }
-        }
+
         simulationRepo.save(sim);
         runSimulation(sim);
         return sim;
@@ -108,23 +95,37 @@ public class SimulationService {
         HashMap<String, ArrayList<Double>> offShoreOutputs = new HashMap<String, ArrayList<Double>>();
         HashMap<String, ArrayList<Double>> onShoreOutputs = new HashMap<String, ArrayList<Double>>();
 
+        //takes county/region name and appends to array for output
         for (County c: sim.getCounties()) {
             counties.add(c.getCounty());
         }
         for (Region r: sim.getRegions()) {
             regions.add(r.getRegion());
         }
+
+        //additional loop to convert regions into to composite counties
+        for (String r: regions) {//cycles through regions
+            ArrayList<Plant> temp =getPlantByRegion(r);//gets all plants by region
+            HashSet<String> set= new HashSet<>();
+            for (Plant p: temp) {//cycles through plants in region getting unique county names
+                set.add(p.getCounty());
+            }
+        }
+
+        //calculates increments of simulation
         if (sim.isHourly()){
             intervals=sim.getDays()*24;
         }else if(!sim.isHourly()){
             intervals=sim.getDays();
         }
 
+
         //total capacity for each energy type for each region
         double countyOnshoreCapacity = 0.0;
         double countyOffshoreCapacity = 0.0;
         double countySolarCapacity = 0.0;
 
+        //variable for storing the calculated values of energy production
         ArrayList<Double> onshoreProduction = new ArrayList<Double>();
         ArrayList<Double> offshoreProduction = new ArrayList<Double>();
         ArrayList<Double> solarProduction = new ArrayList<Double>();

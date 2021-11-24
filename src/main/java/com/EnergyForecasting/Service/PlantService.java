@@ -3,6 +3,7 @@ package com.EnergyForecasting.Service;
 import com.EnergyForecasting.Exceptions.PlantNotFoundException;
 import com.EnergyForecasting.Model.Plant;
 import com.EnergyForecasting.Repository.PlantRepo;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,19 +30,32 @@ public class PlantService {
         return plantRepo.save(p);
     }
 
-    public List<Plant> getAllPlants(){
-        return plantRepo.findAll();
-    }
-    public ArrayList<Plant> getPlantsByRegion(String reg){
-        ArrayList<Plant> temp= new ArrayList<Plant>();
-        for (Plant p: getAllPlants()) {
-            if (p.getRegion().equals(reg)){
-               temp.add(p);
-            }
+    public List<Plant> getAllPlants() {
+        List<Plant> allPlants = null;
+        try {
+            allPlants=plantRepo.findAll();
+
+        } catch (NullPointerException e) {
+            throw e;
         }
-        return temp;
+        return allPlants;
     }
-    public ArrayList<Plant> getPlantsByCounty(String county){
+    public ArrayList<Plant> getPlantsByRegion(@NonNull String reg){
+        List<Plant> temp=null;
+        try{
+        for (Plant p: getAllPlants()) {
+            if (p.getRegion().equals(reg)) {
+                temp.add(p);
+            }
+            System.out.println("sdvbh");
+        }
+        }catch (NullPointerException e){
+            System.out.println("null pointer exception");
+        }
+        return (ArrayList<Plant>)temp;
+    }
+
+    public ArrayList<Plant> getPlantsByCounty(@NonNull String county){
         ArrayList<Plant> temp= new ArrayList<Plant>();
         for (Plant p: getAllPlants()) {
             if (p.getCounty().equals(county)){
@@ -68,7 +82,6 @@ public class PlantService {
         }
         return temp;
     }
-
 
     public Plant updatePlant(Plant plant){
         return plantRepo.save(plant);
