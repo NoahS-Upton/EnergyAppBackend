@@ -1,5 +1,6 @@
 package com.EnergyForecasting.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -17,10 +18,10 @@ public class Region {
     private  String region;
 
 
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "forecastRegions")
     private Set<Forecast> forecastSet= new HashSet<>();
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "simulationRegions")
     private Set<Simulation> simulationSet= new HashSet<>();
 
