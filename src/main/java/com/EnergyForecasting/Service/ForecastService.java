@@ -57,12 +57,12 @@ public class ForecastService {
         return forecastRepo.findForecastById(id).orElseThrow(() -> new ForecastNotFoundException("Forecast with ID=" + id + " not found"));
     }
 
-    public ArrayList<Plant> getPlantByRegion(String region){
-        ArrayList<Plant> plants=plantService.getPlantsByRegion(region);
+    public List<Plant> getPlantByRegion(String region){
+        List<Plant> plants=plantService.getPlantsByRegion(region);
         return plants;
     }
     public ArrayList<Plant> getPlantByCounty(String county){
-        ArrayList<Plant> plants=plantService.getPlantsByRegion(county);
+        ArrayList<Plant> plants=plantService.getPlantsByCounty(county);
         return plants;
     }
 
@@ -73,7 +73,7 @@ public class ForecastService {
 
         //for each region, gets each subsequent county for calling apis for calculation
         for (Region r: region) {
-            ArrayList<Plant> temp =getPlantByRegion(r.getRegion());
+            List<Plant> temp =getPlantByRegion(r.getRegion());
             HashSet<String> set= new HashSet<>();
             for (Plant p: temp) {
                 set.add(p.getCounty());

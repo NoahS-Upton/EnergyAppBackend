@@ -40,19 +40,14 @@ public class PlantService {
         }
         return allPlants;
     }
-    public ArrayList<Plant> getPlantsByRegion(@NonNull String reg){
-        List<Plant> temp=null;
-        try{
+    public List<Plant> getPlantsByRegion(@NonNull String reg){
+        List<Plant> temp= new ArrayList<Plant>();
         for (Plant p: getAllPlants()) {
-            if (p.getRegion().equals(reg)) {
+            if (p.getRegion().equals(reg)){
                 temp.add(p);
             }
-            System.out.println("sdvbh");
         }
-        }catch (NullPointerException e){
-            System.out.println("null pointer exception");
-        }
-        return (ArrayList<Plant>)temp;
+        return temp;
     }
 
     public ArrayList<Plant> getPlantsByCounty(@NonNull String county){

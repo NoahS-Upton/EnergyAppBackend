@@ -188,7 +188,7 @@ public class EnergyForecastingApplication {
 			}
 		};
 		PlantService  ps= new PlantService(pr);
-		ps.getPlantsByRegion("London");
+		ps.getAllPlants();
 
 	}
 

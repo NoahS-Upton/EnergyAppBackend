@@ -64,8 +64,8 @@ public class SimulationService {
         return plants;
     }
 
-    public ArrayList<Plant> getPlantByRegion(String region){
-        ArrayList<Plant> plants=plantService.getPlantsByRegion(region);
+    public List<Plant> getPlantByRegion(String region){
+        List<Plant> plants=plantService.getPlantsByRegion(region);
         return plants;
     }
     public ArrayList<Plant> getPlantByCounty(String county){
@@ -103,15 +103,21 @@ public class SimulationService {
             regions.add(r.getRegion());
         }
 
+        HashSet<String> set= new HashSet<>();
         //additional loop to convert regions into to composite counties
         for (String r: regions) {//cycles through regions
-            ArrayList<Plant> temp =getPlantByRegion(r);//gets all plants by region
-            HashSet<String> set= new HashSet<>();
-            for (Plant p: temp) {//cycles through plants in region getting unique county names
+            List<Plant> temp =getPlantByRegion(r);//gets all plants by region
+
+
+            for (Plant p: temp ) {//cycles through plants in region getting unique county names
+                if (p.getCounty()!=null){
                 set.add(p.getCounty());
+                }
             }
         }
-
+        for (String s: set) {
+            counties.add(s);
+        }
         //calculates increments of simulation
         if (sim.isHourly()){
             intervals=sim.getDays()*24;
