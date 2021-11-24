@@ -164,7 +164,7 @@ public class SimulationService {
             }
 
 
-            // capacities are working, need to now check why calculations aren/t working
+            // capacities are working, need to now check why calculations aren't working,
 
 
 
