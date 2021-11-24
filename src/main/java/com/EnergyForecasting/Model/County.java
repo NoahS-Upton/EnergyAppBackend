@@ -1,5 +1,6 @@
 package com.EnergyForecasting.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -15,8 +16,10 @@ public class County {
     private Long countyID;
     private String county;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "forecastCounties")
     Set<Forecast> forecastSet= new HashSet<>();
+
 
     @ManyToMany(mappedBy = "simulationCounties")
     Set<Simulation> simulationSet= new HashSet<>();

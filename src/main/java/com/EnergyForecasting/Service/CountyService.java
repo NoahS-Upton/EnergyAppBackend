@@ -35,7 +35,7 @@ public class CountyService {
         countyRepo.deleteByCountyID(countyID);
     }
 
-    public County getByCountyID(Long countyID){
+    public County findByCountyID(Long countyID){
         return countyRepo.findByCountyID(countyID).orElseThrow(() -> new CountyNotFoundException("Forecast with ID=" + countyID + " not found"));
     }
 }

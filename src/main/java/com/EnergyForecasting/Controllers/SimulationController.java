@@ -68,4 +68,11 @@ public class SimulationController {
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
 
+    @PutMapping("/{simulationID}/county/{countyID}")
+    public Simulation assignCountyToSimulation(@PathVariable Long simulationID, @PathVariable Long countyID){
+        Simulation simulation = simulationService.getSimulationById(simulationID);
+        County county=simulationService.findByCountyID(countyID);
+        simulation.assignCounty(county);
+        return simulationService.saveSimulation(simulation);
+    }
 }

@@ -8,6 +8,7 @@ import java.util.Set;
 
 @Entity
 public class Simulation {
+    
     //ID to track simulation
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,6 +23,8 @@ public class Simulation {
             inverseJoinColumns = @JoinColumn(name = "regionid")
     )
     private Set<Region> simulationRegions= new HashSet<>();
+
+
     @ManyToMany
     @JoinTable(
             name = "simulationCounties",
@@ -114,5 +117,9 @@ public class Simulation {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void assignCounty(County county) {
+        simulationCounties.add(county);
     }
 }
