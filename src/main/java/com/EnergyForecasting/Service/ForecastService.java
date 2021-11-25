@@ -4,10 +4,7 @@ import com.EnergyForecasting.Exceptions.CountyNotFoundException;
 import com.EnergyForecasting.Exceptions.ForecastNotFoundException;
 import com.EnergyForecasting.Exceptions.RegionNotFoundException;
 import com.EnergyForecasting.Model.*;
-import com.EnergyForecasting.Repository.CountyRepo;
-import com.EnergyForecasting.Repository.ForecastRepo;
-import com.EnergyForecasting.Repository.PlantRepo;
-import com.EnergyForecasting.Repository.RegionRepo;
+import com.EnergyForecasting.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,23 +18,23 @@ public class ForecastService {
     private ForecastRepo forecastRepo;
     private CountyRepo countyRepo;
     private RegionRepo regionRepo;
+    private ForecastOutputRepo forecastOutputRepo;
+    private ForecastOutputService forecastOutputService;
     private PlantRepo plantRepo;
     private PlantService plantService;
     private Calculation calculation;
     private APICaller apiCaller;
 
     @Autowired
-    public ForecastService(ForecastRepo forecastRepo, CountyRepo countyRepo, RegionRepo regionRepo, PlantRepo plantRepo, PlantService plantService) {
+    public ForecastService(ForecastRepo forecastRepo, CountyRepo countyRepo, RegionRepo regionRepo, ForecastOutputService forecastOutputService, PlantRepo plantRepo, PlantService plantService) {
         this.forecastRepo = forecastRepo;
         this.countyRepo = countyRepo;
         this.regionRepo = regionRepo;
+        this.forecastOutputService = forecastOutputService;
         this.plantRepo = plantRepo;
         this.plantService = plantService;
         this.calculation = new Calculation();
         this.apiCaller = new APICaller();
-    }
-
-    public ForecastService() {
     }
 
     public Forecast saveForecast(Forecast forecast){
