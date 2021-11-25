@@ -3,7 +3,9 @@ package com.EnergyForecasting.Controllers;
 
 import com.EnergyForecasting.Model.County;
 import com.EnergyForecasting.Model.Forecast;
+import com.EnergyForecasting.Model.ForecastOutput;
 import com.EnergyForecasting.Model.Region;
+import com.EnergyForecasting.Service.ForecastOutputService;
 import com.EnergyForecasting.Service.ForecastService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +17,12 @@ import java.util.List;
 @RequestMapping("/forecast")
 public class ForecastController {
     private final ForecastService forecastService;
+    private final ForecastOutputService forecastOutputService;
 
-    public ForecastController(ForecastService forecastService) {
+
+    public ForecastController(ForecastService forecastService, ForecastOutputService forecastOutputService) {
         this.forecastService = forecastService;
+        this.forecastOutputService = forecastOutputService;
     }
 
     @GetMapping("/all")
@@ -77,6 +82,15 @@ public class ForecastController {
         Forecast forecast = forecastService.getForecastById(forecastID);
         Region region=forecastService.findByRegionID(regionID);
         forecast.assignRegion(region);
+        return forecastService.saveForecast(forecast);
+    }
+
+
+    @PutMapping("/{forecastID}/output/{outputID}")
+    public Forecast assignForecastToOutput(@PathVariable Long forecastID, @PathVariable Long outputID){
+        ForecastOutput forecastOutput = forecastOutputService.getForecastById(forecastID);
+        Forecast forecast=forecastService.getForecastById(forecastID);
+        forecastOutput.assignForecast(forecast);
         return forecastService.saveForecast(forecast);
     }
 

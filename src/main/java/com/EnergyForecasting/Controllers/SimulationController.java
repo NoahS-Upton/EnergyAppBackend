@@ -83,5 +83,4 @@ public class SimulationController {
         simulation.assignRegion(region);
         return simulationService.saveSimulation(simulation);
     }
-
 }

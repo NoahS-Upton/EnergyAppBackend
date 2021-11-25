@@ -19,4 +19,7 @@ public class ForecastOutput {
     @JoinColumn(name= "id", referencedColumnName = "id")
     private Forecast forecast;
 
+    public void assignForecast(Forecast forecast) {
+        this.forecast=forecast;
+    }
 }
