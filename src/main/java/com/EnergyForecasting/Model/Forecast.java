@@ -1,5 +1,6 @@
 package com.EnergyForecasting.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -47,8 +48,9 @@ public class Forecast implements Serializable {
 
 
     // Outputs to screen
-
-    //private Set<ForecastCountyOutputs> countyOutputs= new HashSet<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "forecastOutputs")
+    private Set<ForecastCountyOutputs> countyOutputs= new HashSet<>();
 
 
 
@@ -172,6 +174,12 @@ public class Forecast implements Serializable {
     public void setWM2(double[] WM2) {
         this.WM2 = WM2;
     }
+    public void assignCounty(County county) {
+        forecastCounties.add(county);
+    }
+    public void assignRegion(Region region) {
+        forecastRegions.add(region);
+    }
 
     @Override
     public String toString() {
@@ -189,4 +197,6 @@ public class Forecast implements Serializable {
                 ", windAngle=" + Arrays.toString(windAngle) +
                 '}';
     }
+
+
 }

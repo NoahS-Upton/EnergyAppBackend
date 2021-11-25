@@ -1,7 +1,9 @@
 package com.EnergyForecasting.Controllers;
 
 
+import com.EnergyForecasting.Model.County;
 import com.EnergyForecasting.Model.Forecast;
+import com.EnergyForecasting.Model.Region;
 import com.EnergyForecasting.Service.ForecastService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,4 +62,22 @@ public class ForecastController {
 
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
+
+
+    @PutMapping("/{forecastID}/county/{countyID}")
+    public Forecast assignCountyToForecast(@PathVariable Long forecastID, @PathVariable Long countyID){
+        Forecast forecast = forecastService.getForecastById(forecastID);
+        County county=forecastService.findByCountyID(countyID);
+        forecast.assignCounty(county);
+        return forecastService.saveForecast(forecast);
+    }
+
+    @PutMapping("/{forecastID}/region/{regionID}")
+    public Forecast assignRegionToForecast(@PathVariable Long forecastID, @PathVariable Long regionID){
+        Forecast forecast = forecastService.getForecastById(forecastID);
+        Region region=forecastService.findByRegionID(regionID);
+        forecast.assignRegion(region);
+        return forecastService.saveForecast(forecast);
+    }
+
 }

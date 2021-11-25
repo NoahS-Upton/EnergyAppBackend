@@ -1,11 +1,13 @@
 package com.EnergyForecasting.Service;
 
+import com.EnergyForecasting.Exceptions.CountyNotFoundException;
 import com.EnergyForecasting.Exceptions.ForecastNotFoundException;
+import com.EnergyForecasting.Exceptions.RegionNotFoundException;
 import com.EnergyForecasting.Model.*;
 import com.EnergyForecasting.Repository.CountyRepo;
-import com.EnergyForecasting.Repository.RegionRepo;
 import com.EnergyForecasting.Repository.ForecastRepo;
 import com.EnergyForecasting.Repository.PlantRepo;
+import com.EnergyForecasting.Repository.RegionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +67,13 @@ public class ForecastService {
         ArrayList<Plant> plants=plantService.getPlantsByCounty(county);
         return plants;
     }
+    public County findByCountyID(Long countyID) {
+        return countyRepo.findByCountyID(countyID).orElseThrow(() -> new CountyNotFoundException("County with ID=" + countyID + " not found"));
+    }
+    public Region findByRegionID(Long regionID) {
+        return regionRepo.findByRegionID(regionID).orElseThrow(() -> new RegionNotFoundException("Region with ID=" + regionID + " not found"));
+    }
+
 
 
     public void generateForecast(boolean hourly, int days, Set<Region> region, Set<County> county, boolean onshore, boolean offshore, boolean solar, String userID) throws IOException, InterruptedException {
