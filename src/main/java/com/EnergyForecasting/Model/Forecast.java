@@ -50,7 +50,7 @@ public class Forecast implements Serializable {
     // Outputs to screen
     @JsonIgnore
     @OneToMany(mappedBy = "forecastOutputs")
-    private Set<ForecastCountyOutputs> countyOutputs= new HashSet<>();
+    private Set<ForecastOutput> countyOutputs= new HashSet<>();
 
 
 

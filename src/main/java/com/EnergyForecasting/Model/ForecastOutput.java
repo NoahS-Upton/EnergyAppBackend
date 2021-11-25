@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 @Entity
-@Table(name = "forecast_county_outputs")
-public class ForecastCountyOutputs {
+@Table(name = "forecast_outputs")
+public class ForecastOutput {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
-    private Long ID;
+    private Long outputID;
     private String county;
     private Double offshoreOutput;
     private Double onshoreOutput;
