@@ -49,7 +49,7 @@ public class Forecast implements Serializable {
 
     // Outputs to screen
     @JsonIgnore
-    @OneToMany(mappedBy = "forecastOutputs")
+    @OneToMany(mappedBy = "forecast")
     private Set<ForecastOutput> countyOutputs= new HashSet<>();
 
 
@@ -174,6 +174,15 @@ public class Forecast implements Serializable {
     public void setWM2(double[] WM2) {
         this.WM2 = WM2;
     }
+
+    public Set<ForecastOutput> getCountyOutputs() {
+        return countyOutputs;
+    }
+
+    public void setCountyOutputs(Set<ForecastOutput> countyOutputs) {
+        this.countyOutputs = countyOutputs;
+    }
+
     public void assignCounty(County county) {
         forecastCounties.add(county);
     }
