@@ -30,8 +30,9 @@ public class APICaller {
     public void getForecastData(boolean hourly, int days, String longitude, String latitude, String longChar, String latChar) throws IOException, InterruptedException {
         String data[];
         if (hourly){
+            String temp= ""+days*24;
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+"%C2%B0%20"+latChar+",%20"+ longitude +"%C2%B0%20"+longChar+"?plimit="+24*days+"&filter=1hr"))
+                    .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+",%20"+ longitude +"?plimit="+temp+"&filter=1hr"))
                     .header("x-rapidapi-host", "aerisweather1.p.rapidapi.com")
                     .header("x-rapidapi-key", "f065867663msh0c61f0d4699f6bap11e507jsn2a32eff05892")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
@@ -39,8 +40,9 @@ public class APICaller {
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
             data= response.body().split("\\s|:|,");
         }else{
+            String temp= ""+days;
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+"%C2%B0%20"+latChar+",%20"+ longitude +"%C2%B0%20"+longChar+"?plimit="+1*days))
+                    .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+"%C2%B0%20"+latChar+",%20"+ longitude +"%C2%B0%20"+longChar+"?plimit="+temp))
                     .header("x-rapidapi-host", "aerisweather1.p.rapidapi.com")
                     .header("x-rapidapi-key", "f065867663msh0c61f0d4699f6bap11e507jsn2a32eff05892")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
