@@ -99,5 +99,13 @@ public class APICaller {
     public ArrayList<String> getAvgDewpointC() {
         return avgDewpointC;
     }
+
+    public void setWindSpeed(ArrayList<String> windSpeed) {
+        this.windSpeed = windSpeed;
+    }
+
+    public void setAvgDewpointC(ArrayList<String> avgDewpointC) {
+        this.avgDewpointC = avgDewpointC;
+    }
 }
 

@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,13 +51,6 @@ public class Forecast implements Serializable {
     @OneToMany(mappedBy = "forecast")
     private Set<ForecastOutput> countyOutputs= new HashSet<>();
 
-
-
-
-    //calculation variables
-    private double[] WM2;
-    private double[] windSpeed;
-    private double[] windAngle;
 
 
     public Forecast() {
@@ -154,26 +146,6 @@ public class Forecast implements Serializable {
 //        this.countyOutputs = countyOutputs;
 //    }
 
-    public double[] getWindSpeed() {
-        return windSpeed;
-    }
-    public void setWindSpeed(double[] windSpeed) {
-        this.windSpeed = windSpeed;
-    }
-    public double[] getWindAngle() {
-        return windAngle;
-    }
-    public void setWindAngle(double[] windAngle) {
-        this.windAngle = windAngle;
-    }
-
-    public double[] getWM2() {
-        return WM2;
-    }
-
-    public void setWM2(double[] WM2) {
-        this.WM2 = WM2;
-    }
 
     public Set<ForecastOutput> getCountyOutputs() {
         return countyOutputs;
@@ -202,8 +174,6 @@ public class Forecast implements Serializable {
                 ", offshore=" + offshore +
                 ", solar=" + solar +
                 ", userID='" + userID + '\'' +
-                ", windSpeed=" + Arrays.toString(windSpeed) +
-                ", windAngle=" + Arrays.toString(windAngle) +
                 '}';
     }
 

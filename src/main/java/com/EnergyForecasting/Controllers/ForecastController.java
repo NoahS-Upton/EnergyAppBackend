@@ -53,16 +53,15 @@ public class ForecastController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/runForecast/{id}")
-    public ResponseEntity<List<Forecast>> runForecast(@PathVariable("id") Long id) throws IOException, InterruptedException {
-        Forecast forecast = forecastService.getForecastById(id);
+    @GetMapping("/runForecast/")
+    public ResponseEntity<ForecastToScreen> runForecast(@RequestBody Forecast forecast) throws IOException, InterruptedException {
         forecastService.runForecast(forecast);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/rerun/{id}")
-    public ResponseEntity<ForecastToScreen> rerunForecast(@PathVariable("id") Long id) throws IOException, InterruptedException {
-        ForecastToScreen forecastToScreen=forecastService.rerunForecast(id);
+    public ResponseEntity<ForecastToScreen>rerunForecast(@PathVariable("id") Long id) throws IOException, InterruptedException {
+       ForecastToScreen forecastToScreen=forecastService.rerunForecast(id);
         return new ResponseEntity<>(forecastToScreen,HttpStatus.OK);
     }
 

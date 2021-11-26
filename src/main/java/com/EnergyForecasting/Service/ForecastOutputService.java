@@ -1,6 +1,5 @@
 package com.EnergyForecasting.Service;
 
-import com.EnergyForecasting.Exceptions.ForecastNotFoundException;
 import com.EnergyForecasting.Exceptions.ForecastOutputtNotFoundException;
 import com.EnergyForecasting.Model.ForecastOutput;
 import com.EnergyForecasting.Repository.ForecastOutputRepo;
@@ -18,7 +17,6 @@ public class ForecastOutputService {
     public ForecastOutputService(ForecastOutputRepo forecastOutputRepo) {
         this.forecastOutputRepo=forecastOutputRepo;
     }
-
 
     public ForecastOutput getForecastById (Long outputID){
         return forecastOutputRepo.findByOutputID(outputID).orElseThrow(() -> new ForecastOutputtNotFoundException("Forecast output with ID=" + outputID + " not found"));
