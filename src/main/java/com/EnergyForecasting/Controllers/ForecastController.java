@@ -1,16 +1,14 @@
 package com.EnergyForecasting.Controllers;
 
 
-import com.EnergyForecasting.Model.County;
-import com.EnergyForecasting.Model.Forecast;
-import com.EnergyForecasting.Model.ForecastOutput;
-import com.EnergyForecasting.Model.Region;
+import com.EnergyForecasting.Model.*;
 import com.EnergyForecasting.Service.ForecastOutputService;
 import com.EnergyForecasting.Service.ForecastService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -56,10 +54,16 @@ public class ForecastController {
     }
 
     @GetMapping("/runForecast/{id}")
-    public ResponseEntity<List<Forecast>> runForecast(@PathVariable("id") Long id){
+    public ResponseEntity<List<Forecast>> runForecast(@PathVariable("id") Long id) throws IOException, InterruptedException {
         Forecast forecast = forecastService.getForecastById(id);
         forecastService.runForecast(forecast);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/rerun/{id}")
+    public ResponseEntity<ForecastToScreen> rerunForecast(@PathVariable("id") Long id) throws IOException, InterruptedException {
+        ForecastToScreen forecastToScreen=forecastService.rerunForecast(id);
+        return new ResponseEntity<>(forecastToScreen,HttpStatus.OK);
     }
 
     @PostMapping("/generateForecast")
