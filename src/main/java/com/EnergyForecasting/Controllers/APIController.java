@@ -19,12 +19,12 @@ public class APIController {
         this.apiService = apiService;
     }
 
-    @GetMapping("/runLongLat/")
+    @GetMapping("/runLongLat")
     public ResponseEntity<APIOutput> runLongLat(@RequestBody String longitude, String latitude) throws IOException, InterruptedException {
         apiService.runApiByLongLat(longitude, latitude);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @GetMapping("/runCity/")
+    @GetMapping("/runCity")
     public ResponseEntity<APIOutput> runCity(@RequestBody String city, String country) throws IOException, InterruptedException {
         apiService.runApiByCity(city, country);
         return new ResponseEntity<>(HttpStatus.OK);

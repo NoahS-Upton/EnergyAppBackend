@@ -82,6 +82,9 @@ public class APICaller {
     }
 
     public void getForecastDataByLatLong(String longitude, String latitude) throws IOException, InterruptedException {
+        String latSplit[]= latitude.split(".");
+        String preDec= latSplit[0];
+        String postDec= "."+latSplit[1];
         String data[];
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+",%20"+ longitude +"?plimit=156&filter=1hr"))
