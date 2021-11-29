@@ -1,12 +1,14 @@
 package com.EnergyForecasting.Controllers;
 
-import com.EnergyForecasting.Model.*;
+import com.EnergyForecasting.Model.County;
+import com.EnergyForecasting.Model.Region;
+import com.EnergyForecasting.Model.Simulation;
+import com.EnergyForecasting.Model.SimulationOutput;
 import com.EnergyForecasting.Service.SimulationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -20,67 +22,65 @@ public class SimulationController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Simulation>> getAllSimulations() {
-        List<Simulation> simulations = simulationService.getAllSimulations();
+    public ResponseEntity<List<Simulation>> getAllSimulations(){
+        List<Simulation> simulations= simulationService.getAllSimulations();
         return new ResponseEntity<>(simulations, HttpStatus.OK);
     }
 
     @GetMapping("/getSimulation/{id}")
-    public ResponseEntity<List<Simulation>> getSimulationById(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Simulation>> getSimulationById(@PathVariable("id") Long id){
         Simulation simulation = simulationService.getSimulationById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
     @GetMapping("/rerun/{id}")
-    public ResponseEntity<SimulationOutput> rerunSimulation(@PathVariable("id") Long id) {
-        SimulationOutput simulationOutput = simulationService.rerunSimulation(id);
-        return new ResponseEntity<>(simulationOutput, HttpStatus.OK);
+    public ResponseEntity<SimulationOutput> rerunSimulation(@PathVariable("id") Long id){
+        SimulationOutput simulationOutput=simulationService.rerunSimulation(id);
+        return new ResponseEntity<>(simulationOutput,HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Simulation> addSimulation(@RequestBody Simulation s) {
-        Simulation addedSimulation = simulationService.saveSimulation(s);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Simulation> addSimulation(@RequestBody Simulation s){
+        Simulation addedSimulation= simulationService.saveSimulation(s);
+        return new ResponseEntity<>( HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Simulation> updateSimulation(@RequestBody Simulation s) {
-        Simulation updatedSimulation = simulationService.updateSimulation(s);
+    public ResponseEntity<Simulation> updateSimulation(@RequestBody Simulation s){
+        Simulation updatedSimulation= simulationService.updateSimulation(s);
         return new ResponseEntity<>(updatedSimulation, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteSimulation(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteSimulation(@PathVariable("id") Long id){
         simulationService.deleteSimulationById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/runSimulation")
-    public ResponseEntity<SimulationOutput> runSimulation(@RequestBody Simulation simulation) {
-        SimulationOutput simulationOutput = simulationService.runSimulation(simulation);
+    public ResponseEntity<SimulationOutput> runSimulation(@RequestBody Simulation simulation){
+        SimulationOutput  simulationOutput=simulationService.runSimulation(simulation);
         return new ResponseEntity<>(simulationOutput, HttpStatus.OK);
     }
 
     @PostMapping("/advancedSimulation")
-    public ResponseEntity<Simulation> advancedSimulation(@RequestBody Set<Region> regions, Set<County> counties, int days, boolean hourly, ArrayList<SimulationDaylight> daylightHours, ArrayList<SimulationWindspeed> windSpeed, boolean wind, boolean solar) {
-        simulationService.advancedSimulation(regions, counties, days, hourly, daylightHours, windSpeed, wind, solar);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Simulation> advancedSimulation(@RequestBody Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
+        simulationService.advancedSimulation(regions,counties,days,hourly, wm2,windSpeed,wind, solar);
+        return new ResponseEntity<>( HttpStatus.CREATED);
     }
 
     @PutMapping("/{simulationID}/county/{countyID}")
-    public Simulation assignCountyToSimulation(@PathVariable Long simulationID, @PathVariable Long countyID) {
+    public Simulation assignCountyToSimulation(@PathVariable Long simulationID, @PathVariable Long countyID){
         Simulation simulation = simulationService.getSimulationById(simulationID);
-        County county = simulationService.findByCountyID(countyID);
+        County county=simulationService.findByCountyID(countyID);
         simulation.assignCounty(county);
         return simulationService.saveSimulation(simulation);
     }
 
     @PutMapping("/{simulationID}/region/{regionID}")
-    public Simulation assignRegionToSimulation(@PathVariable Long simulationID, @PathVariable Long regionID) {
+    public Simulation assignRegionToSimulation(@PathVariable Long simulationID, @PathVariable Long regionID){
         Simulation simulation = simulationService.getSimulationById(simulationID);
-        Region region = simulationService.findByRegionID(regionID);
+        Region region=simulationService.findByRegionID(regionID);
         simulation.assignRegion(region);
         return simulationService.saveSimulation(simulation);
     }
-
 }
