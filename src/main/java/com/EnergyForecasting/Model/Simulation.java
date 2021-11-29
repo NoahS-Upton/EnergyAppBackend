@@ -1,10 +1,8 @@
 package com.EnergyForecasting.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,30 +37,22 @@ public class Simulation {
     //simulation criteria/constraints
     private int days;
     private boolean hourly;
-
-
+    private double WM2;
+    private double windSpeed;
     private boolean wind;
     private boolean solar;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "simulation")
-    private ArrayList<SimulationDaylight> daylightHours;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "simulation")
-    private ArrayList<SimulationWindspeed> windSpeed;
 
     //no args alt constructor
     public Simulation() {
     }
     @Autowired
-    public Simulation( Set<Region> regions, Set<County> counties, int days, boolean hourly, ArrayList<SimulationDaylight> daylightHours, ArrayList<SimulationWindspeed> windSpeed, boolean wind, boolean solar) {
+    public Simulation( Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar) {
         //inputs from user
         this.simulationRegions = regions;
         this.simulationCounties= counties;
         this.days = days;
         this.hourly = hourly;
-        this.daylightHours = daylightHours;
+        this.WM2 = wm2;
         this.windSpeed = windSpeed;
         this.wind = wind;
         this.solar = solar;
@@ -81,19 +71,12 @@ public class Simulation {
     public void setHourly(boolean hourly) {
         this.hourly = hourly;
     }
-
-    public void setDaylightHours(ArrayList<SimulationDaylight> daylightHours) {
-        this.daylightHours = daylightHours;
-    }
-
-    public ArrayList<SimulationWindspeed> getWindSpeed() {
+    public double getWindSpeed() {
         return windSpeed;
     }
-
-    public void setWindSpeed(ArrayList<SimulationWindspeed> windSpeed) {
+    public void setWindSpeed(double windSpeed) {
         this.windSpeed = windSpeed;
     }
-
     public boolean isWind() {
         return wind;
     }
@@ -106,9 +89,11 @@ public class Simulation {
     public void setSolar(boolean solar) {
         this.solar = solar;
     }
-
-    public ArrayList<SimulationDaylight> getDaylightHours() {
-        return daylightHours;
+    public double getWM2() {
+        return WM2;
+    }
+    public void setWM2(double WM2) {
+        this.WM2 = WM2;
     }
 
     public Set<Region> getRegions() {
