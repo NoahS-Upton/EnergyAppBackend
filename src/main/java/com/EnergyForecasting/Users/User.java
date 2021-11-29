@@ -27,51 +27,67 @@ public class User {
     private UserRole role;
 
 
-    public User(String username, String password, String email,  UserRole role) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.role = role;
         this.enabled=true;
         this.locked=false;
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
 }
-//
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        SimpleGrantedAuthority auth= new SimpleGrantedAuthority(role.name());
-//        return Collections.singletonList(auth);
-//    }
-//    @Override
-//    public String getPassword() {
-//        return password;
-//    }
-//    @Override
-//    public String getUsername() {
-//        return username;
-//    }
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return false;
-//    }
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return !locked;
-//    }
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-//    @Override
-//    public boolean isEnabled() {
-//        return enabled;
-//    }
-//
-//    public String getEmail() {
-//        return email;
-//    }
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
-//}

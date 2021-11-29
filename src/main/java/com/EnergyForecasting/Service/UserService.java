@@ -1,54 +1,53 @@
-//package com.EnergyForecasting.Service;
-//
-//import com.EnergyForecasting.Repository.UserRepo;
-//import com.EnergyForecasting.Users.User;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.UUID;
-//
-//@Service
-//public class UserService implements UserDetailsService {
-//    private final UserRepo userRepo;
-    //private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    //private final TokenService tokenService;
+package com.EnergyForecasting.Service;
 
-//    @Autowired
-//    public UserService(UserRepo userRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
-//        this.userRepo = userRepo;
-//        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-//    }
-//
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        return userRepo.findByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User "+ username+" not found"));
-//    }
-//
-//    public String registerUser(User user){
-//        boolean exists =userRepo.findByUsername(user.getUsername()).isPresent();
-//        boolean emExist= userRepo.findByEmail(user.getEmail()).isPresent();
-//        if (exists){
-//            throw new IllegalStateException("Username Taken");
-//        }
-//        if (emExist){
-//            throw new IllegalStateException("email Taken");
-//        }
-//        String encPass= bCryptPasswordEncoder.encode(user.getPassword());
-//        user.setPassword(encPass);
-//        userRepo.save(user);
-//        String tokenID=UUID.randomUUID().toString();
-////        Token token = new Token(tokenID, LocalDateTime.now(),LocalDateTime.now().plusMinutes(10),user);
-////        tokenService.saveToken(token);
-//
-//        return tokenID;
-//    }
-//
-//    public int enableUser(String email) {
-//        return userRepo.enableUser(email);
-//    }
-//}
+import com.EnergyForecasting.Repository.UserRepo;
+import com.EnergyForecasting.Users.User;
+import com.EnergyForecasting.Users.UserRole;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
+@Service
+public class UserService {
+    private final UserRepo userRepo;
+
+
+    @Autowired
+    public UserService(UserRepo userRepo) {
+        this.userRepo = userRepo;
+
+    }
+
+    public void registerUser(User user) throws NoSuchAlgorithmException {
+        boolean exists =userRepo.findByUsername(user.getUsername()).isPresent();
+        boolean emExist= userRepo.findByEmail(user.getEmail()).isPresent();
+        if (exists){
+            throw new IllegalStateException("Username Taken");
+        }
+        if (emExist){
+            throw new IllegalStateException("email Taken");
+        }
+
+        user.setRole(UserRole.GENERAL);
+
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        md.update(salt);
+
+        String hashedPassword = md.digest(user.getPassword().getBytes(StandardCharsets.UTF_8)).toString();
+        user.setPassword(hashedPassword);
+
+        userRepo.save(user);
+    }
+
+    public int enableUser(String email) {
+        return userRepo.enableUser(email);
+    }
+}
