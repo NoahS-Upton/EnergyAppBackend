@@ -16,7 +16,7 @@ public class Simulation {
     private Long id;
 
     //stats on region being simulated
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "simulationRegions",
             joinColumns = @JoinColumn(name = "id"),
@@ -25,7 +25,7 @@ public class Simulation {
     private Set<Region> simulationRegions= new HashSet<>();
 
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "simulationCounties",
             joinColumns = @JoinColumn(name = "id"),
