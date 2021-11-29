@@ -73,8 +73,8 @@ public class SimulationService {
         return plants;
     }
 
-    public Simulation advancedSimulation(Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
-        Simulation sim= new Simulation(regions,counties,days,hourly,wm2,windSpeed,wind,solar);
+    public Simulation advancedSimulation(Set<Region> regions, Set<County> counties, int days, boolean hourly, ArrayList<SimulationDaylight> daylightHours, ArrayList<SimulationWindspeed> windSpeed, boolean wind, boolean solar){
+        Simulation sim= new Simulation(regions,counties,days,hourly,daylightHours,windSpeed,wind,solar);
 
         //gets all counties in regions and appends to county list for calculations
 
@@ -152,15 +152,21 @@ public class SimulationService {
                     countyOffshoreCapacity += p.getCapacity();
                 }
             }
-            if ((sim.getWindSpeed() < 25 && sim.getWindSpeed() > 5 && sim.isWind())) {
-                offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity, sim.getWindSpeed()));
-                onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity, sim.getWindSpeed()));
-            } else {
-                offshoreProduction.add(0.00);
-                onshoreProduction.add(0.00);
+            for (SimulationWindspeed d:sim.getWindSpeed()) {
+                if ((d.getWindspeed() < 25 && d.getWindspeed() > 5 && sim.isWind())) {
+                    offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity,d.getWindspeed()));
+                    onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity, d.getWindspeed()));
+                } else {
+                    offshoreProduction.add(0.00);
+                    onshoreProduction.add(0.00);
+                }
+
             }
+
             if (sim.isSolar()) {
-                solarProduction.add(calculation.solarOutput(countySolarCapacity, sim.getWM2()));
+                for (SimulationDaylight d: sim.getDaylightHours()) {
+                solarProduction.add(calculation.solarOutput(countySolarCapacity,d.getDaylightHours()));
+                }
             }
 
 
