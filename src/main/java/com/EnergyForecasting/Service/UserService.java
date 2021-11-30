@@ -41,8 +41,15 @@ public class UserService {
         MessageDigest md = MessageDigest.getInstance("SHA-512");
         md.update(salt);
 
-        String hashedPassword = md.digest(user.getPassword().getBytes(StandardCharsets.UTF_8)).toString();
-        user.setPassword(hashedPassword);
+        byte[] hashedPassword = md.digest(user.getPassword().getBytes(StandardCharsets.UTF_8));
+        String password="";
+        String hashed="";
+        for (byte b:hashedPassword) {
+            hashed=""+b;
+            password+=hashed;
+        }
+
+        user.setPassword(password);
 
         userRepo.save(user);
     }
