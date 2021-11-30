@@ -160,7 +160,7 @@ public class SimulationService {
                 onshoreProduction.add(0.00);
             }
             if (sim.isSolar()) {
-                solarProduction.add(calculation.solarOutput(countySolarCapacity, sim.getWM2()));
+                solarProduction.add(calculation.solarOutput(countySolarCapacity, sim.getDaylightHours()));
             }
 
 

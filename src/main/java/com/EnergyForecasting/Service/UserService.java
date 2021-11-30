@@ -54,7 +54,5 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public int enableUser(String email) {
-        return userRepo.enableUser(email);
-    }
+
 }

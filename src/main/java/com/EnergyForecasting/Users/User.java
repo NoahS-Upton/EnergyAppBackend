@@ -22,8 +22,6 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private boolean enabled;
-    private boolean locked;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
@@ -32,8 +30,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.enabled=true;
-        this.locked=false;
     }
 
     public long getId() {
@@ -68,21 +64,6 @@ public class User {
         this.email = email;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isLocked() {
-        return locked;
-    }
-
-    public void setLocked(boolean locked) {
-        this.locked = locked;
-    }
 
     public UserRole getRole() {
         return role;
