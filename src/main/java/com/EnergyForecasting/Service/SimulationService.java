@@ -111,6 +111,7 @@ public class SimulationService {
             for (Plant p: temp ) {//cycles through plants in region getting unique county names
                 if (p.getCounty()!=null){
                 set.add(p.getCounty());
+
                 }
             }
         }
