@@ -40,8 +40,8 @@ public class PlantService {
         }
         return allPlants;
     }
-    public List<Plant> getPlantsByRegion(@NonNull String reg){
-        List<Plant> temp= new ArrayList<Plant>();
+    public ArrayList<Plant> getPlantsByRegion(@NonNull String reg){
+        ArrayList<Plant> temp= new ArrayList<Plant>();
         for (Plant p: getAllPlants()) {
             if (p.getRegion().equals(reg)){
                 temp.add(p);
