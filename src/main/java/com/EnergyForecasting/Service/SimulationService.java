@@ -4,10 +4,7 @@ import com.EnergyForecasting.Exceptions.CountyNotFoundException;
 import com.EnergyForecasting.Exceptions.RegionNotFoundException;
 import com.EnergyForecasting.Exceptions.SimulationNotFoundException;
 import com.EnergyForecasting.Model.*;
-import com.EnergyForecasting.Repository.CountyRepo;
-import com.EnergyForecasting.Repository.PlantRepo;
-import com.EnergyForecasting.Repository.RegionRepo;
-import com.EnergyForecasting.Repository.SimulationRepo;
+import com.EnergyForecasting.Repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +21,8 @@ public class SimulationService {
     private Calculation calculation;
     private RegionRepo regionRepo;
     private CountyRepo countyRepo;
+    private SimDaylightRepo simDaylightRepo;
+    private SimWindRepo simWindRepo;
 
     public SimulationService(SimulationRepo simulationRepo, PlantRepo plantRepo, PlantService plantService, RegionRepo regionRepo, CountyRepo countyRepo) {
         this.simulationRepo = simulationRepo;
@@ -73,7 +72,11 @@ public class SimulationService {
         return plants;
     }
 
-    public Simulation advancedSimulation(Set<Region> regions, Set<County> counties, int days, boolean hourly, ArrayList<SimDaylight> daylight, ArrayList<SimWind> windSpeed, boolean wind, boolean solar){
+
+
+
+
+    public Simulation advancedSimulation(Set<Region> regions, Set<County> counties, int days, boolean hourly, SimDaylight[] daylight, SimWind[] windSpeed, boolean wind, boolean solar){
         Simulation sim= new Simulation(regions,counties,days,hourly,daylight,windSpeed,wind,solar);
 
         //gets all counties in regions and appends to county list for calculations
