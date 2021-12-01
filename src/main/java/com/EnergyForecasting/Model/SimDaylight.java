@@ -1,5 +1,7 @@
 package com.EnergyForecasting.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,6 +11,12 @@ public class SimDaylight {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false, name = "daylightID")
     private Long daylightID;
+
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinTable( name = "simulationDaylightValues",
+            joinColumns = @JoinColumn(name = "daylightID"),
+            inverseJoinColumns = @JoinColumn(name = "id"))
     private Simulation simulation;
     private double value;
 
