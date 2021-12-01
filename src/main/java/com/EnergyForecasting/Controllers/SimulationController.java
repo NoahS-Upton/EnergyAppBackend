@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -61,7 +60,7 @@ public class SimulationController {
     }
 
     @PostMapping("/advancedSimulation")
-    public ResponseEntity<Simulation> advancedSimulation(@RequestBody Set<Region> regions, Set<County> counties, int days, boolean hourly, ArrayList<SimDaylight> wm2, ArrayList<SimWind> windSpeed, boolean wind, boolean solar){
+    public ResponseEntity<Simulation> advancedSimulation(@RequestBody Set<Region> regions, Set<County> counties, int days, boolean hourly, SimDaylight[] wm2, SimWind[] windSpeed, boolean wind, boolean solar){
         simulationService.advancedSimulation(regions,counties,days,hourly, wm2,windSpeed,wind, solar);
         return new ResponseEntity<>( HttpStatus.CREATED);
     }

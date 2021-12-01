@@ -1,9 +1,9 @@
 package com.EnergyForecasting.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,15 +41,21 @@ public class Simulation {
     private boolean wind;
     private boolean solar;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "simulation")
+    @OrderColumn
+    private SimDaylight[] daylightHours;
 
-    private ArrayList<SimDaylight> daylightHours;
-    private ArrayList<SimWind> windSpeed;
+    @JsonIgnore
+    @OneToMany(mappedBy = "simulation" )
+    @OrderColumn
+    private SimWind[] windSpeed;
 
     //no args alt constructor
     public Simulation() {
     }
     @Autowired
-    public Simulation( Set<Region> regions, Set<County> counties, int days, boolean hourly, ArrayList<SimDaylight> daylightHours, ArrayList<SimWind> windSpeed, boolean wind, boolean solar) {
+    public Simulation( Set<Region> regions, Set<County> counties, int days, boolean hourly, SimDaylight[] daylightHours, SimWind[] windSpeed, boolean wind, boolean solar) {
         //inputs from user
         this.simulationRegions = regions;
         this.simulationCounties= counties;
@@ -88,19 +94,19 @@ public class Simulation {
         this.solar = solar;
     }
 
-    public ArrayList<SimDaylight> getDaylightHours() {
+    public SimDaylight[] getDaylightHours() {
         return daylightHours;
     }
 
-    public void setDaylightHours(ArrayList<SimDaylight> daylightHours) {
+    public void setDaylightHours(SimDaylight[] daylightHours) {
         this.daylightHours = daylightHours;
     }
 
-    public ArrayList<SimWind> getWindSpeed() {
+    public SimWind[] getWindSpeed() {
         return windSpeed;
     }
 
-    public void setWindSpeed(ArrayList<SimWind> windSpeed) {
+    public void setWindSpeed(SimWind[] windSpeed) {
         this.windSpeed = windSpeed;
     }
 
