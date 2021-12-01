@@ -3,6 +3,7 @@ package com.EnergyForecasting.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,14 +40,16 @@ public class Simulation {
     private boolean hourly;
     private boolean wind;
     private boolean solar;
-    private double daylightHours;
-    private double windSpeed;
+
+
+    private ArrayList<SimDaylight> daylightHours;
+    private ArrayList<SimWind> windSpeed;
 
     //no args alt constructor
     public Simulation() {
     }
     @Autowired
-    public Simulation( Set<Region> regions, Set<County> counties, int days, boolean hourly, double daylightHours, double windSpeed, boolean wind, boolean solar) {
+    public Simulation( Set<Region> regions, Set<County> counties, int days, boolean hourly, ArrayList<SimDaylight> daylightHours, ArrayList<SimWind> windSpeed, boolean wind, boolean solar) {
         //inputs from user
         this.simulationRegions = regions;
         this.simulationCounties= counties;
@@ -71,12 +74,7 @@ public class Simulation {
     public void setHourly(boolean hourly) {
         this.hourly = hourly;
     }
-    public double getWindSpeed() {
-        return windSpeed;
-    }
-    public void setWindSpeed(double windSpeed) {
-        this.windSpeed = windSpeed;
-    }
+
     public boolean isWind() {
         return wind;
     }
@@ -88,6 +86,22 @@ public class Simulation {
     }
     public void setSolar(boolean solar) {
         this.solar = solar;
+    }
+
+    public ArrayList<SimDaylight> getDaylightHours() {
+        return daylightHours;
+    }
+
+    public void setDaylightHours(ArrayList<SimDaylight> daylightHours) {
+        this.daylightHours = daylightHours;
+    }
+
+    public ArrayList<SimWind> getWindSpeed() {
+        return windSpeed;
+    }
+
+    public void setWindSpeed(ArrayList<SimWind> windSpeed) {
+        this.windSpeed = windSpeed;
     }
 
     public Set<Region> getSimulationRegions() {
@@ -106,13 +120,6 @@ public class Simulation {
         this.simulationCounties = simulationCounties;
     }
 
-    public double getDaylightHours() {
-        return daylightHours;
-    }
-
-    public void setDaylightHours(double daylightHours) {
-        this.daylightHours = daylightHours;
-    }
 
     public Set<Region> getRegions() {
         return simulationRegions;

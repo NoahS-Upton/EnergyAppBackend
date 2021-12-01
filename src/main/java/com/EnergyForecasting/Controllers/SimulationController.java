@@ -1,14 +1,12 @@
 package com.EnergyForecasting.Controllers;
 
-import com.EnergyForecasting.Model.County;
-import com.EnergyForecasting.Model.Region;
-import com.EnergyForecasting.Model.Simulation;
-import com.EnergyForecasting.Model.SimulationOutput;
+import com.EnergyForecasting.Model.*;
 import com.EnergyForecasting.Service.SimulationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -63,7 +61,7 @@ public class SimulationController {
     }
 
     @PostMapping("/advancedSimulation")
-    public ResponseEntity<Simulation> advancedSimulation(@RequestBody Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
+    public ResponseEntity<Simulation> advancedSimulation(@RequestBody Set<Region> regions, Set<County> counties, int days, boolean hourly, ArrayList<SimDaylight> wm2, ArrayList<SimWind> windSpeed, boolean wind, boolean solar){
         simulationService.advancedSimulation(regions,counties,days,hourly, wm2,windSpeed,wind, solar);
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
