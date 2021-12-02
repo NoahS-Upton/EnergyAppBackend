@@ -25,6 +25,9 @@ public class SimDaylight {
         this.value = value;
     }
 
+    public SimDaylight() {
+    }
+
     public void assignSimulation(Simulation simulation) {
         this.simulation=simulation;
     }

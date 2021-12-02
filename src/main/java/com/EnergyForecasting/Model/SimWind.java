@@ -23,7 +23,8 @@ public class SimWind {
     private double value;
 
 
-
+    public SimWind() {
+    }
 
     public SimWind(Simulation simulation, double value) {
         this.simulation = simulation;

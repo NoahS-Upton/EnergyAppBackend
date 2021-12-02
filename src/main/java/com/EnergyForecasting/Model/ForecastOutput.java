@@ -29,6 +29,9 @@ public class ForecastOutput {
         this.forecast = forecast;
     }
 
+    public ForecastOutput() {
+    }
+
     public void assignForecast(Forecast forecast) {
         this.forecast=forecast;
     }
