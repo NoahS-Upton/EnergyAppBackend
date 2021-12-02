@@ -21,4 +21,9 @@ public class ForecastOutputService {
     public ForecastOutput getForecastById (Long outputID){
         return forecastOutputRepo.findByOutputID(outputID).orElseThrow(() -> new ForecastOutputtNotFoundException("Forecast output with ID=" + outputID + " not found"));
     }
+    public ForecastOutput saveForecastOutput(ForecastOutput forecastOutput){
+        return forecastOutputRepo.save(forecastOutput);
+    }
+
+
 }

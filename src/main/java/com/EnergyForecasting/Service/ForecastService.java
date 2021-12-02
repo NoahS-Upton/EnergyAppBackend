@@ -180,7 +180,7 @@ public class ForecastService {
 
 
                 ForecastOutput forecastOutput = new ForecastOutput( i, c, countyOffshoreProduction, countyOnshoreProduction, countySolarProduction, forecast);
-                System.out.println(forecastOutput.getCounty());
+                //forecastOutputService.saveForecastOutput(forecastOutput);
                 forecast.getCountyOutputs().add(forecastOutput);
                 forecastOutputs.add(forecastOutput);
             }

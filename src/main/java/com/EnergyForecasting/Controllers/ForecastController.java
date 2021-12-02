@@ -2,6 +2,7 @@ package com.EnergyForecasting.Controllers;
 
 
 import com.EnergyForecasting.Model.*;
+import com.EnergyForecasting.Service.CountyService;
 import com.EnergyForecasting.Service.ForecastOutputService;
 import com.EnergyForecasting.Service.ForecastService;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,12 @@ import java.util.List;
 public class ForecastController {
     private final ForecastService forecastService;
     private final ForecastOutputService forecastOutputService;
+    private final CountyService countyService;
 
-
-    public ForecastController(ForecastService forecastService, ForecastOutputService forecastOutputService) {
+    public ForecastController(ForecastService forecastService, ForecastOutputService forecastOutputService, CountyService countyService) {
         this.forecastService = forecastService;
         this.forecastOutputService = forecastOutputService;
+        this.countyService = countyService;
     }
 
     @GetMapping("/all")
@@ -53,10 +55,17 @@ public class ForecastController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/runForecast/")
+    @GetMapping("/runForecast")
     public ResponseEntity<ForecastToScreen> runForecast(@RequestBody Forecast forecast) throws IOException, InterruptedException {
-        forecastService.runForecast(forecast);
-        return new ResponseEntity<>(HttpStatus.OK);
+//        forecastService.saveForecast(forecast);
+
+//        List<County> counties=countyService.getAllCounties();
+//        for (County c:counties) {
+//            for (County k: forecast.getForecastCounties())
+//            assignCountyToForecast(forecast.getId(),c.getCountyID());
+//        }
+        ForecastToScreen forecastToScreen= forecastService.runForecast(forecast);
+        return new ResponseEntity<>(forecastToScreen, HttpStatus.OK);
     }
 
     @GetMapping("/rerun/{id}")
