@@ -12,9 +12,12 @@ public class APIService {
     public APIService() {
     }
 
-    public APIOutput runApiByLongLat(String longitude, String latitude) throws IOException, InterruptedException {
+    public APIOutput runByLongLat( String latLong) throws IOException, InterruptedException {
         APICaller apiCaller= new APICaller();
-        apiCaller.getForecastDataByLatLong(longitude, latitude);
+        String[] latlong= latLong.split(",");
+        String longitude = latlong[1].strip();
+        String latitude= latlong[0].strip();
+        apiCaller.getForecastDataByLatLong(latitude, longitude);
         APIOutput output= new APIOutput(
                 apiCaller.getWindSpeed(),
                 apiCaller.getWindDirDeg(),
@@ -28,7 +31,7 @@ public class APIService {
 
     }
 
-    public APIOutput runApiByCity(String city, String country) throws IOException, InterruptedException {
+    public APIOutput runByCity(String city, String country) throws IOException, InterruptedException {
         APICaller apiCaller= new APICaller();
         apiCaller.getForecastDataByCity(city, country);
         APIOutput output= new APIOutput(

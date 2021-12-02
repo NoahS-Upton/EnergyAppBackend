@@ -1,5 +1,7 @@
 package com.EnergyForecasting.Model;
 
+import lombok.NonNull;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -81,13 +83,13 @@ public class APICaller {
         }
     }
 
-    public void getForecastDataByLatLong(String longitude, String latitude) throws IOException, InterruptedException {
+    public void getForecastDataByLatLong(@NonNull String latitude, @NonNull  String longitude) throws IOException, InterruptedException {
         String latSplit[]= latitude.split(".");
         String preDec= latSplit[0];
         String postDec= "."+latSplit[1];
         String data[];
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+",%20"+ longitude +"?plimit=156&filter=1hr"))
+                    .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+","+longitude +"?plimit=156&filter=1hr"))
                     .header("x-rapidapi-host", "aerisweather1.p.rapidapi.com")
                     .header("x-rapidapi-key", "f065867663msh0c61f0d4699f6bap11e507jsn2a32eff05892")
                     .method("GET", HttpRequest.BodyPublishers.noBody())

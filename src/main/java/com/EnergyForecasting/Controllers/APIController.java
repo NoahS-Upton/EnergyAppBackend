@@ -4,10 +4,7 @@ import com.EnergyForecasting.Model.APIOutput;
 import com.EnergyForecasting.Service.APIService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 @RestController
@@ -19,14 +16,14 @@ public class APIController {
         this.apiService = apiService;
     }
 
-    @GetMapping("/runLongLat")
-    public ResponseEntity<APIOutput> runLongLat(@RequestBody String longitude, String latitude) throws IOException, InterruptedException {
-        apiService.runApiByLongLat(longitude, latitude);
+    @PostMapping("/runLongLat")
+    public ResponseEntity<APIOutput> runByLatLong(@RequestBody String latLong) throws IOException, InterruptedException {
+        apiService.runByLongLat(latLong);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/runCity")
-    public ResponseEntity<APIOutput> runCity(@RequestBody String city, String country) throws IOException, InterruptedException {
-        apiService.runApiByCity(city, country);
+    public ResponseEntity<APIOutput> runByCity(@RequestBody String city, String country) throws IOException, InterruptedException {
+        apiService.runByCity(city, country);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
