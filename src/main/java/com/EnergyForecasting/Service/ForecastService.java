@@ -5,12 +5,16 @@ import com.EnergyForecasting.Exceptions.ForecastNotFoundException;
 import com.EnergyForecasting.Exceptions.RegionNotFoundException;
 import com.EnergyForecasting.Model.*;
 import com.EnergyForecasting.Repository.*;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 @Service
 @Transactional
@@ -72,9 +76,7 @@ public class ForecastService {
         return regionRepo.findByRegionID(regionID).orElseThrow(() -> new RegionNotFoundException("Region with ID=" + regionID + " not found"));
     }
 
-
-
-    public ForecastToScreen runForecast(Forecast forecast) throws IOException, InterruptedException {
+    public ForecastToScreen runForecast(@NonNull Forecast forecast) throws IOException, InterruptedException {
         //used for creating forecast outputs to display to the screen
         ArrayList<String> counties=new ArrayList<String>();
         ArrayList<String> regions=new ArrayList<String>();
@@ -83,7 +85,9 @@ public class ForecastService {
         HashMap<Integer, ArrayList<Double>> offshoreOutputs = new HashMap<Integer, ArrayList<Double>>();
         HashMap<Integer, ArrayList<Double>> onshoreOutputs = new HashMap<Integer, ArrayList<Double>>();
 
-        //creates container to send data to front end for forecast
+        //creates array for storing forecastouputs for each county to be added into fts
+        ArrayList<ForecastOutput> forecastOutputs= new ArrayList<ForecastOutput>();
+        //creates container to send data to front end for forecast, in forecastToScreen
         HashMap<String,ArrayList<ForecastOutput>> fts= new HashMap<String,ArrayList<ForecastOutput>>();
 
         //for holding plants for calculation
@@ -152,9 +156,10 @@ public class ForecastService {
             latChar = plant.getLatChar();
             longChar = plant.getLongChar();
 
+
             apiCaller.getForecastData(forecast.isHourly(), forecast.getDays(), longitude, latitude, longChar, latChar);
 
-            for (int i = 0; i <= intervals; i++) {
+            for (int i = 0; i < intervals; i++) {
                 //gets capacities for calculations
                 for (Plant p : plants) {
                     if (p.getType().equalsIgnoreCase("onshore")) {
@@ -170,15 +175,17 @@ public class ForecastService {
                 wm2 = Double.parseDouble(apiCaller.getSolarWM2().get(i));
 
                 countyOffshoreProduction = calculation.windOutput(countyOffshoreCapacity, windspeed);
-                countyOnshoreProduction = calculation.windOutput(countyOffshoreCapacity, windspeed);
+                countyOnshoreProduction = calculation.windOutput(countyOnshoreCapacity, windspeed);
                 countySolarProduction = calculation.solarOutput(countySolarCapacity, wm2);
 
-                ForecastOutput forecastOutput = new ForecastOutput(i, c, countyOffshoreProduction, countyOnshoreProduction, countySolarProduction, forecast);
 
+                ForecastOutput forecastOutput = new ForecastOutput( i, c, countyOffshoreProduction, countyOnshoreProduction, countySolarProduction, forecast);
+                System.out.println(forecastOutput.getCounty());
                 forecast.getCountyOutputs().add(forecastOutput);
-                fts.get(c).add(forecastOutput);
-
+                forecastOutputs.add(forecastOutput);
             }
+
+            fts.put(c,forecastOutputs);
 
             //reset all necessary variable
             plants.clear();

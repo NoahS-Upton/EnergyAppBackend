@@ -1,6 +1,7 @@
 package com.EnergyForecasting.Model;
 
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,19 +21,26 @@ public class APICaller {
     ArrayList<String> avgDewpointC;
     ArrayList<String> temperature;
 
+    @Autowired
     public APICaller() {
+
+    }
+
+    public void getForecastData(@NonNull boolean hourly,
+                                @NonNull int days,
+                                @NonNull String longitude,
+                                @NonNull String latitude,
+                                @NonNull String longChar,
+                                @NonNull String latChar) throws IOException, InterruptedException {
+        String data[];
         ArrayList<String> windSpeed= new ArrayList<String>();
         ArrayList<String> windDirDeg= new ArrayList<String>();
         ArrayList<String> windGust= new ArrayList<String>();
         ArrayList<String> maxWindSpeed= new ArrayList<String>();
         ArrayList<String> minWindSpeed= new ArrayList<String>();
         ArrayList<String> solarWM2= new ArrayList<String>();
-        ArrayList<String> avgDewpointC= new ArrayList<String>();
-        ArrayList<String> temperature= new ArrayList<String>();
-    }
 
-    public void getForecastData(boolean hourly, int days, String longitude, String latitude, String longChar, String latChar) throws IOException, InterruptedException {
-        String data[];
+
         if (hourly){
             String temp= ""+days*24;
             HttpRequest request = HttpRequest.newBuilder()
@@ -59,28 +67,31 @@ public class APICaller {
 
 
         for (int i=0; i<data.length;i++) {
-            if(data[i].contains("windSpeedKPH")){
+            if(data[i].contains("windSpeedKPH") && data[i+1] != null){
                 windSpeed.add(data[i+1]);
             }
-            if(data[i].contains("windDirDeg")){
+            if(data[i].contains("windDirDeg") && data[i+1] != null){
                 windDirDeg.add(data[i+1]);
             }
-            if(data[i].contains("windGustKPH")){
+            if(data[i].contains("windGustKPH") && data[i+1] != null){
                 windGust.add(data[i+1]);
             }
-            if(data[i].contains("windSpeedMaxKPH")){
+            if(data[i].contains("windSpeedMaxKPH") && data[i+1] != null){
                 maxWindSpeed.add(data[i+1]);
             }
-            if(data[i].contains("windSpeedMinKPH")){
+            if(data[i].contains("windSpeedMinKPH") && data[i+1] != null){
                 minWindSpeed.add(data[i+1]);
             }
-            if(data[i].contains("solradWM2")){
+            if(data[i].contains("solradWM2") && data[i+1] != null){
                 solarWM2.add(data[i+1]);
             }
-            if(data[i].contains("avgDewpointC")){
-                avgDewpointC.add(data[i+1]);
-            }
         }
+        this.windSpeed=windSpeed;
+        this.maxWindSpeed=maxWindSpeed;
+        this.minWindSpeed=minWindSpeed;
+        this.windDirDeg=windDirDeg;
+        this.windGust=windGust;
+        this.solarWM2=solarWM2;
     }
 
     public void getForecastDataByLatLong(@NonNull String latitude, @NonNull  String longitude) throws IOException, InterruptedException {
