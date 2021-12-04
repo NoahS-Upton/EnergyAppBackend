@@ -178,7 +178,7 @@ public class ForecastService {
 
                 countyOffshoreProduction = calculation.windOutput(countyOffshoreCapacity, windspeed);
                 countyOnshoreProduction = calculation.windOutput(countyOnshoreCapacity, windspeed);
-                countySolarProduction = calculation.solarOutput(countySolarCapacity, wm2);
+                countySolarProduction = calculation.solarRadOutput(countySolarCapacity, wm2);
 
 
                 ForecastOutput forecastOutput = new ForecastOutput( i, c, countyOffshoreProduction, countyOnshoreProduction, countySolarProduction, forecast);

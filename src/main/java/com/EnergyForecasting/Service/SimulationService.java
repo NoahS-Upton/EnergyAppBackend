@@ -167,7 +167,7 @@ public class SimulationService {
             }
             for (SimDaylight d:sim.getDaylightHours()) {
                 if (sim.isSolar()) {
-                    solarProduction.add(calculation.solarOutput(countySolarCapacity,d.getValue()));
+                    solarProduction.add(calculation.solarHourlyOutput(countySolarCapacity,d.getValue()));
                 }
             }
 
