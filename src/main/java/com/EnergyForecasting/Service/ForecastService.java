@@ -117,8 +117,10 @@ public class ForecastService {
         //calculates increments of simulation
         if (forecast.isHourly()){
             intervals=forecast.getDays()*24;
+            System.out.println(intervals);
         }else if(!forecast.isHourly()){
             intervals=forecast.getDays();
+            System.out.println(intervals);
         }
 
         //total capacity for each energy type for each region
@@ -157,7 +159,7 @@ public class ForecastService {
             longChar = plant.getLongChar();
 
 
-            apiCaller.getForecastData(forecast.isHourly(), forecast.getDays(), longitude, latitude, longChar, latChar);
+            apiCaller.getForecastData(forecast.isHourly(), intervals, longitude, latitude, longChar, latChar);
 
             for (int i = 0; i < intervals; i++) {
                 //gets capacities for calculations

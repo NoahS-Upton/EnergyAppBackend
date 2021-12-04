@@ -57,12 +57,14 @@ public class ForecastController {
 
     @GetMapping("/runForecast")
     public ResponseEntity<ForecastToScreen> runForecast(@RequestBody Forecast forecast) throws IOException, InterruptedException {
-//        forecastService.saveForecast(forecast);
+        forecastService.saveForecast(forecast);
 
-//        List<County> counties=countyService.getAllCounties();
-//        for (County c:counties) {
+//
+//        for (County c:countyService.getAllCounties()) {
 //            for (County k: forecast.getForecastCounties())
-//            assignCountyToForecast(forecast.getId(),c.getCountyID());
+//                if (c.equals(k)){
+//                    assignCountyToForecast(forecast.getId(),c.getCountyID());
+//                }
 //        }
         ForecastToScreen forecastToScreen= forecastService.runForecast(forecast);
         return new ResponseEntity<>(forecastToScreen, HttpStatus.OK);

@@ -29,6 +29,7 @@ public class Forecast implements Serializable {
     @Column(name="userID")
     private String userID;
 
+
     @ManyToMany
     @JoinTable(
             name = "forecastRegions",
