@@ -52,9 +52,8 @@ public class APICaller {
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
             data= response.body().split("\\s|:|,");
         }else{
-            String temp= ""+days;
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+"%C2%B0%20"+latChar+",%20"+ longitude +"%C2%B0%20"+longChar+"?plimit="+temp))
+                    .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+",%20"+ longitude +"?plimit="+days))
                     .header("x-rapidapi-host", "aerisweather1.p.rapidapi.com")
                     .header("x-rapidapi-key", "f065867663msh0c61f0d4699f6bap11e507jsn2a32eff05892")
                     .method("GET", HttpRequest.BodyPublishers.noBody())

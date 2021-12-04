@@ -6,7 +6,7 @@ public class Calculation {
     }
 
     public static double solarOutput(double capacity, double MW2){
-            double output = capacity*MW2*0.75;
+            double output = capacity*MW2*0.75/60;
             return output;
         }
 
