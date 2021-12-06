@@ -204,7 +204,7 @@ public class ForecastService {
             windspeed = 0.0;
             wm2 = 0.0;
         }
-        ForecastToScreen out= new ForecastToScreen(counties,regions,intervals,fts);
+        ForecastToScreen out= new ForecastToScreen(counties,regions,intervals,fts, forecast);
         return out;
     }
 

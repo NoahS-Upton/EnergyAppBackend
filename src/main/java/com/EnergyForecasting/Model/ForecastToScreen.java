@@ -9,12 +9,14 @@ public class ForecastToScreen {
    private ArrayList<String> regions;
    private int intervals;
    private HashMap<String,ArrayList<ForecastOutput>> fts;
+   private Forecast forecast;
 
-    public ForecastToScreen(ArrayList<String> counties, ArrayList<String> regions, int intervals, HashMap<String, ArrayList<ForecastOutput>> fts) {
+    public ForecastToScreen(ArrayList<String> counties, ArrayList<String> regions, int intervals, HashMap<String, ArrayList<ForecastOutput>> fts, Forecast forecast) {
         this.counties = counties;
         this.regions = regions;
         this.intervals = intervals;
         this.fts = fts;
+        this.forecast = forecast;
     }
 
     public ArrayList<String> getCounties() {
@@ -47,5 +49,13 @@ public class ForecastToScreen {
 
     public void setFts(HashMap<String, ArrayList<ForecastOutput>> fts) {
         this.fts = fts;
+    }
+
+    public Forecast getForecast() {
+        return forecast;
+    }
+
+    public void setForecast(Forecast forecast) {
+        this.forecast = forecast;
     }
 }
