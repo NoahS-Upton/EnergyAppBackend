@@ -19,12 +19,12 @@ public class APIController {
     @GetMapping("/runLatLong/{latLong}")
     public ResponseEntity<APIOutput> runByLatLong(@PathVariable String latLong) throws IOException, InterruptedException {
         APIOutput apiOutput=apiService.runByLongLat(latLong);
-        return new ResponseEntity<APIOutput>(HttpStatus.OK);
+        return new ResponseEntity<APIOutput>(apiOutput,HttpStatus.OK);
     }
     @GetMapping("/runCity/{cityCountry}")
     public ResponseEntity<APIOutput> runByCity(@PathVariable String cityCountry) throws IOException, InterruptedException {
         APIOutput apiOutput=apiService.runByCity(cityCountry);
-        return new ResponseEntity<APIOutput>(HttpStatus.OK);
+        return new ResponseEntity<APIOutput>(apiOutput,HttpStatus.OK);
     }
 
 
