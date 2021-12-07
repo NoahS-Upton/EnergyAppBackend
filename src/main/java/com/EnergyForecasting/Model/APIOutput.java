@@ -9,17 +9,15 @@ public class APIOutput {
     public ArrayList<String> maxWindSpeed;
     public ArrayList<String> minWindSpeed;
     public ArrayList<String> solarWM2;
-    public ArrayList<String> avgDewpoint;
     public ArrayList<String> temperature;
 
-    public APIOutput(ArrayList<String> windSpeed, ArrayList<String> windDirDeg, ArrayList<String> windGust, ArrayList<String> maxWindSpeed, ArrayList<String> minWindSpeed, ArrayList<String> solarWM2, ArrayList<String> avgDewpoint,ArrayList<String> temperature) {
+    public APIOutput(ArrayList<String> windSpeed, ArrayList<String> windDirDeg, ArrayList<String> windGust, ArrayList<String> maxWindSpeed, ArrayList<String> minWindSpeed, ArrayList<String> solarWM2,ArrayList<String> temperature) {
         this.windSpeed = windSpeed;
         this.windDirDeg = windDirDeg;
         this.windGust = windGust;
         this.maxWindSpeed = maxWindSpeed;
         this.minWindSpeed = minWindSpeed;
         this.solarWM2 = solarWM2;
-        this.avgDewpoint = avgDewpoint;
         this.temperature=temperature;
     }
 
@@ -69,14 +67,6 @@ public class APIOutput {
 
     public void setSolarWM2(ArrayList<String> solarWM2) {
         this.solarWM2 = solarWM2;
-    }
-
-    public ArrayList<String> getAvgDewpoint() {
-        return avgDewpoint;
-    }
-
-    public void setAvgDewpoint(ArrayList<String> avgDewpoint) {
-        this.avgDewpoint = avgDewpoint;
     }
 
     public ArrayList<String> getTemperature() {

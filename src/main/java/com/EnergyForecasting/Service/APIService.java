@@ -12,12 +12,9 @@ public class APIService {
     public APIService() {
     }
 
-    public APIOutput runByLongLat( String latLong) throws IOException, InterruptedException {
+    public APIOutput runByLongLat(String latLong) throws IOException, InterruptedException {
         APICaller apiCaller= new APICaller();
-        String[] latlong= latLong.split(",");
-        String longitude = latlong[1].strip();
-        String latitude= latlong[0].strip();
-        apiCaller.getForecastDataByLatLong(latitude, longitude);
+        apiCaller.getForecastDataByLatLong(latLong);
         APIOutput output= new APIOutput(
                 apiCaller.getWindSpeed(),
                 apiCaller.getWindDirDeg(),
@@ -25,15 +22,14 @@ public class APIService {
                 apiCaller.getMaxWindSpeed(),
                 apiCaller.getMinWindSpeed(),
                 apiCaller.getSolarWM2(),
-                apiCaller.getAvgDewpointC(),
                 apiCaller.getTemperature());
         return output;
 
     }
 
-    public APIOutput runByCity(String city, String country) throws IOException, InterruptedException {
+    public APIOutput runByCity(String cityCountry) throws IOException, InterruptedException {
         APICaller apiCaller= new APICaller();
-        apiCaller.getForecastDataByCity(city, country);
+        apiCaller.getForecastDataByCity(cityCountry);
         APIOutput output= new APIOutput(
                 apiCaller.getWindSpeed(),
                 apiCaller.getWindDirDeg(),
@@ -41,7 +37,6 @@ public class APIService {
                 apiCaller.getMaxWindSpeed(),
                 apiCaller.getMinWindSpeed(),
                 apiCaller.getSolarWM2(),
-                apiCaller.getAvgDewpointC(),
                 apiCaller.getTemperature());
         return output;
     }

@@ -18,7 +18,6 @@ public class APICaller {
     ArrayList<String> maxWindSpeed;
     ArrayList<String> minWindSpeed;
     ArrayList<String> solarWM2;
-    ArrayList<String> avgDewpointC;
     ArrayList<String> temperature;
 
     @Autowired
@@ -93,13 +92,14 @@ public class APICaller {
         this.solarWM2=solarWM2;
     }
 
-    public void getForecastDataByLatLong(@NonNull String latitude, @NonNull  String longitude) throws IOException, InterruptedException {
-        String latSplit[]= latitude.split(".");
-        String preDec= latSplit[0];
-        String postDec= "."+latSplit[1];
+    public void getForecastDataByLatLong(@NonNull String latLong) throws IOException, InterruptedException {
+        System.out.println(latLong);
+        String latSplit[]= latLong.split(",");
+        String latitude= ""+latSplit[0].strip();
+        String longitude= ""+latSplit[1].strip();
         String data[];
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+","+longitude +"?plimit=156&filter=1hr"))
+                    .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+","+longitude +"?plimit=24&filter=1hr"))
                     .header("x-rapidapi-host", "aerisweather1.p.rapidapi.com")
                     .header("x-rapidapi-key", "f065867663msh0c61f0d4699f6bap11e507jsn2a32eff05892")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
@@ -126,19 +126,20 @@ public class APICaller {
             if(data[i].contains("solradWM2")){
                 solarWM2.add(data[i+1]);
             }
-            if(data[i].contains("avgDewpointC")){
-                avgDewpointC.add(data[i+1]);
-            }
             if(data[i].contains("temperatureC")){
                 temperature.add(data[i+1]);
             }
         }
     }
 
-    public void getForecastDataByCity(String city, String country) throws IOException, InterruptedException {
+    public void getForecastDataByCity(String cityCountry) throws IOException, InterruptedException {
         String data[];
+        String citySplit[]= cityCountry.split(",");
+        String city= ""+citySplit[0].strip();
+        String country= ""+citySplit[1].strip();
+
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+city+",%20"+ country +"?plimit=156&filter=1hr"))
+                .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+city+",%20"+ country +"?plimit=24&filter=1hr"))
                 .header("x-rapidapi-host", "aerisweather1.p.rapidapi.com")
                 .header("x-rapidapi-key", "f065867663msh0c61f0d4699f6bap11e507jsn2a32eff05892")
                 .method("GET", HttpRequest.BodyPublishers.noBody())
@@ -165,9 +166,7 @@ public class APICaller {
             if(data[i].contains("solradWM2")){
                 solarWM2.add(data[i+1]);
             }
-            if(data[i].contains("avgDewpointC")){
-                avgDewpointC.add(data[i+1]);
-            }
+
             if(data[i].contains("temperatureC")){
                 temperature.add(data[i+1]);
             }
@@ -195,16 +194,9 @@ public class APICaller {
     public ArrayList<String> getSolarWM2() {
         return solarWM2;
     }
-    public ArrayList<String> getAvgDewpointC() {
-        return avgDewpointC;
-    }
 
     public void setWindSpeed(ArrayList<String> windSpeed) {
         this.windSpeed = windSpeed;
-    }
-
-    public void setAvgDewpointC(ArrayList<String> avgDewpointC) {
-        this.avgDewpointC = avgDewpointC;
     }
 
     public ArrayList<String> getTemperature() {

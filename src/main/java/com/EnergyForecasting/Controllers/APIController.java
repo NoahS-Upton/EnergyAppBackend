@@ -16,14 +16,14 @@ public class APIController {
         this.apiService = apiService;
     }
 
-    @PostMapping("/runLongLat")
-    public ResponseEntity<APIOutput> runByLatLong(@RequestBody String latLong) throws IOException, InterruptedException {
+    @GetMapping("/runLatLong/{latLong}")
+    public ResponseEntity<APIOutput> runByLatLong(@PathVariable String latLong) throws IOException, InterruptedException {
         apiService.runByLongLat(latLong);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/runCity")
-    public ResponseEntity<APIOutput> runByCity(@RequestBody String city, String country) throws IOException, InterruptedException {
-        apiService.runByCity(city, country);
+    public ResponseEntity<APIOutput> runByCity(@RequestBody String cityCountry) throws IOException, InterruptedException {
+        apiService.runByCity(cityCountry);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
