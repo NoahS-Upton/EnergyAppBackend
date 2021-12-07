@@ -9,7 +9,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class APICaller {
     ArrayList<String> windSpeed;
@@ -52,8 +51,6 @@ public class APICaller {
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
             data= response.body().split("\\s|:|,");
         }
-
-        System.out.println(Arrays.toString(data));
         getValuesFromData(data);
     }
 
@@ -72,7 +69,6 @@ public class APICaller {
                     .build();
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
             data= response.body().split("\\s|:|,");
-        System.out.println(Arrays.toString(data));
         getValuesFromData(data);
     }
 
@@ -90,7 +86,6 @@ public class APICaller {
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         data= response.body().split("\\s|:|,");
-        System.out.println(Arrays.toString(data));
         getValuesFromData(data);
     }
 
@@ -154,11 +149,6 @@ public class APICaller {
     public ArrayList<String> getSolarWM2() {
         return solarWM2;
     }
-
-    public void setWindSpeed(ArrayList<String> windSpeed) {
-        this.windSpeed = windSpeed;
-    }
-
     public ArrayList<String> getTemperature() {
         return temperature;
     }
