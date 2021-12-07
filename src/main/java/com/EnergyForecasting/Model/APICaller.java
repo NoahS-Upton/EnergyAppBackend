@@ -98,6 +98,7 @@ public class APICaller {
         String latitude= ""+latSplit[0].strip();
         String longitude= ""+latSplit[1].strip();
         String data[];
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+latitude+","+longitude +"?plimit=24&filter=1hr"))
                     .header("x-rapidapi-host", "aerisweather1.p.rapidapi.com")
@@ -107,29 +108,7 @@ public class APICaller {
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
             data= response.body().split("\\s|:|,");
         System.out.println(Arrays.toString(data));
-        for (int i=0; i<data.length;i++) {
-            if(data[i].contains("windSpeedKPH")){
-                windSpeed.add(data[i+1]);
-            }
-            if(data[i].contains("windDirDeg")){
-                windDirDeg.add(data[i+1]);
-            }
-            if(data[i].contains("windGustKPH")){
-                windGust.add(data[i+1]);
-            }
-            if(data[i].contains("windSpeedMaxKPH")){
-                maxWindSpeed.add(data[i+1]);
-            }
-            if(data[i].contains("windSpeedMinKPH")){
-                minWindSpeed.add(data[i+1]);
-            }
-            if(data[i].contains("solradWM2")){
-                solarWM2.add(data[i+1]);
-            }
-            if(data[i].contains("temperatureC")){
-                temperature.add(data[i+1]);
-            }
-        }
+        getValuesFromData(data);
     }
 
     public void getForecastDataByCity(String cityCountry) throws IOException, InterruptedException {
@@ -137,6 +116,9 @@ public class APICaller {
         String citySplit[]= cityCountry.split(",");
         String city= ""+citySplit[0].strip();
         String country= ""+citySplit[1].strip();
+
+
+
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://aerisweather1.p.rapidapi.com/forecasts/"+city+",%20"+ country +"?plimit=24&filter=1hr"))
@@ -147,6 +129,17 @@ public class APICaller {
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         data= response.body().split("\\s|:|,");
         System.out.println(Arrays.toString(data));
+        getValuesFromData(data);
+    }
+
+
+    public void getValuesFromData(@NonNull String[] data){
+        ArrayList<String> windSpeed= new ArrayList<String>();
+        ArrayList<String> windDirDeg= new ArrayList<String>();
+        ArrayList<String> windGust= new ArrayList<String>();
+        ArrayList<String> maxWindSpeed= new ArrayList<String>();
+        ArrayList<String> minWindSpeed= new ArrayList<String>();
+        ArrayList<String> solarWM2= new ArrayList<String>();
         for (int i=0; i<data.length;i++) {
             if(data[i].contains("windSpeedKPH")){
                 windSpeed.add(data[i+1]);
@@ -170,9 +163,15 @@ public class APICaller {
             if(data[i].contains("temperatureC")){
                 temperature.add(data[i+1]);
             }
-        }
-    }
+            this.windSpeed=windSpeed;
+            this.maxWindSpeed=maxWindSpeed;
+            this.minWindSpeed=minWindSpeed;
+            this.windDirDeg=windDirDeg;
+            this.windGust=windGust;
+            this.solarWM2=solarWM2;
 
+    }
+    }
 
 
 
