@@ -9,6 +9,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class APICaller {
     ArrayList<String> windSpeed;
@@ -97,11 +98,13 @@ public class APICaller {
         ArrayList<String> maxWindSpeed= new ArrayList<String>();
         ArrayList<String> minWindSpeed= new ArrayList<String>();
         ArrayList<String> solarWM2= new ArrayList<String>();
+        ArrayList<String> temperature= new ArrayList<String>();
+        System.out.println(Arrays.toString(data));
         for (int i=0; i<data.length;i++) {
             if(data[i].contains("windSpeedKPH")){
                 windSpeed.add(data[i+1]);
             }
-            if(data[i].contains("windDirDeg")){
+            if(data[i].contains("windDirDEG")){
                 windDirDeg.add(data[i+1]);
             }
             if(data[i].contains("windGustKPH")){
@@ -117,7 +120,7 @@ public class APICaller {
                 solarWM2.add(data[i+1]);
             }
 
-            if(data[i].contains("temperatureC")){
+            if(data[i].contains("tempC")){
                 temperature.add(data[i+1]);
             }
             this.windSpeed=windSpeed;
@@ -126,6 +129,7 @@ public class APICaller {
             this.windDirDeg=windDirDeg;
             this.windGust=windGust;
             this.solarWM2=solarWM2;
+            this.temperature= temperature;
         }
     }
 
