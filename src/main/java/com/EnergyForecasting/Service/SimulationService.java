@@ -98,6 +98,9 @@ public class SimulationService {
         HashMap<String, ArrayList<Double>> offshoreOutputs = new HashMap<String, ArrayList<Double>>();
         HashMap<String, ArrayList<Double>> onshoreOutputs = new HashMap<String, ArrayList<Double>>();
 
+
+        SimWind[] simWinds= sim.getWindSpeed();
+        System.out.println(simWinds[0].getValue());
         //takes county/region name and appends to array for output
         for (County c: sim.getCounties()) {
             counties.add(c.getCounty());
@@ -144,7 +147,6 @@ public class SimulationService {
 
         for (String s : counties) {
             ArrayList<Plant> countyPlants = getPlantByCounty(s);
-//            System.out.println(countyPlants.get(0).getName());
             //gets capacities for calculations
             for (Plant p : countyPlants) {
                 if (p.getType().equalsIgnoreCase("onshore")) {
@@ -155,9 +157,13 @@ public class SimulationService {
                     countyOffshoreCapacity += p.getCapacity();
                 }
             }
+            System.out.println("hat");
+            System.out.println(countyOnshoreCapacity);
+            System.out.println("cat");
+            System.out.println(sim.getWindSpeed()[0].getValue());
 
             for (SimWind w :sim.getWindSpeed()) {
-                if ((w.getValue() < 25 && w.getValue()> 5 && sim.isWind())) {
+                if (sim.isWind()) {
                     offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity,w.getValue()));
                     onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity, w.getValue()));
                 } else {
@@ -175,6 +181,10 @@ public class SimulationService {
             offshoreOutputs.put(s, new ArrayList<Double>());
             onshoreOutputs.put(s, new ArrayList<Double>());
 
+            System.out.println(s);
+            System.out.println(onshoreProduction.get(0));
+            System.out.println(offshoreProduction.get(0));
+            System.out.println(solarProduction.get(0));
 
             for (Double d: solarProduction) {
                 solarOutputs.get(s).add(d);
