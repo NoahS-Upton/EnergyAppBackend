@@ -57,7 +57,6 @@ public class ForecastController {
 
     @GetMapping("/runForecast")
     public ResponseEntity<ForecastToScreen> runForecast(@RequestBody Forecast forecast) throws IOException, InterruptedException {
-        forecastService.saveForecast(forecast);
         ForecastToScreen forecastToScreen= forecastService.runForecast(forecast);
         return new ResponseEntity<>(forecastToScreen, HttpStatus.OK);
     }
