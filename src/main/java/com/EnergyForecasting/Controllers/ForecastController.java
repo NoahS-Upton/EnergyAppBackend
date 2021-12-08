@@ -121,7 +121,7 @@ public class ForecastController {
         return forecastService.saveForecast(forecast);
     }
 
-    @PutMapping("/{forecastID}/region/{region}")
+    @PutMapping("/{forecastID}/region/{county}")
     public Forecast assignCountyToForecastByName(@PathVariable Long forecastID, @PathVariable String county){
         Forecast forecast = forecastService.getForecastById(forecastID);
         List<County> counties=countyService.getAllCounties();
