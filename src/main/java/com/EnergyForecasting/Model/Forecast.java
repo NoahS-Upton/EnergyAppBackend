@@ -30,14 +30,14 @@ public class Forecast implements Serializable {
     private String userID;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "forecastRegions",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "regionid")
     )
     private Set<Region> forecastRegions= new HashSet<>();
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "forecastCounties",
             joinColumns = @JoinColumn(name = "id"),
