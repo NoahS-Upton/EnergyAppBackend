@@ -5,6 +5,7 @@ import com.EnergyForecasting.Model.*;
 import com.EnergyForecasting.Service.CountyService;
 import com.EnergyForecasting.Service.ForecastOutputService;
 import com.EnergyForecasting.Service.ForecastService;
+import com.EnergyForecasting.Service.RegionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +18,13 @@ import java.util.List;
 public class ForecastController {
     private final ForecastService forecastService;
     private final ForecastOutputService forecastOutputService;
+    private final RegionService regionService;
     private final CountyService countyService;
 
-    public ForecastController(ForecastService forecastService, ForecastOutputService forecastOutputService, CountyService countyService) {
+    public ForecastController(ForecastService forecastService, ForecastOutputService forecastOutputService, RegionService regionService, CountyService countyService) {
         this.forecastService = forecastService;
         this.forecastOutputService = forecastOutputService;
+        this.regionService = regionService;
         this.countyService = countyService;
     }
 
@@ -105,6 +108,31 @@ public class ForecastController {
         return forecastService.saveForecast(forecast);
     }
 
+    @PutMapping("/{forecastID}/region/{region}")
+    public Forecast assignRegionToForecastByName(@PathVariable Long forecastID, @PathVariable String region){
+        Forecast forecast = forecastService.getForecastById(forecastID);
+        List<Region> regions=regionService.getAllRegions();
+        Region reg= new Region();
+        for (Region r: regions) {
+            if (r.getRegion().equals(region));
+            reg= regionService.getRegionByRegionID(r.getRegionID());
+        }
+        forecast.assignRegion(reg);
+        return forecastService.saveForecast(forecast);
+    }
+
+    @PutMapping("/{forecastID}/region/{region}")
+    public Forecast assignCountyToForecastByName(@PathVariable Long forecastID, @PathVariable String county){
+        Forecast forecast = forecastService.getForecastById(forecastID);
+        List<County> counties=countyService.getAllCounties();
+        County coun= new County();
+        for (County c: counties) {
+            if (c.getCounty().equals(county));
+            coun= countyService.getCountyByCountyID(c.getCountyID());
+        }
+        forecast.assignCounty(coun);
+        return forecastService.saveForecast(forecast);
+    }
 
     @PutMapping("/{forecastID}/output/{outputID}")
     public Forecast assignForecastToOutput(@PathVariable Long forecastID, @PathVariable Long outputID){
