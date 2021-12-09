@@ -1,9 +1,6 @@
 package com.EnergyForecasting.Controllers;
 
-import com.EnergyForecasting.Model.County;
-import com.EnergyForecasting.Model.Region;
-import com.EnergyForecasting.Model.Simulation;
-import com.EnergyForecasting.Model.SimulationOutput;
+import com.EnergyForecasting.Model.*;
 import com.EnergyForecasting.Service.SimulationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +46,13 @@ public class SimulationController {
         simulationService.deleteSimulationById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/null")
+    public ResponseEntity<Simulation> getNullSimulation(){
+        Simulation simulation= new Simulation();
+        return new ResponseEntity<Simulation>(simulation, HttpStatus.OK);
+    }
+
     @GetMapping("/runSimulation")
     public ResponseEntity<SimulationOutput> runSimulation(@RequestBody Simulation simulation){
         SimulationOutput  simulationOutput=simulationService.runSimulation(simulation);
