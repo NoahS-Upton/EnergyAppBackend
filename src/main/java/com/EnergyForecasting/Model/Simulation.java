@@ -53,8 +53,6 @@ public class Simulation {
         this.solar = solar;
     }
 
-
-
     //getters and setters
     public int getDays() {
         return days;
