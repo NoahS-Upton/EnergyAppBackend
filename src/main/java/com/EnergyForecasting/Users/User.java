@@ -2,15 +2,14 @@ package com.EnergyForecasting.Users;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @EqualsAndHashCode
-@NoArgsConstructor
 @Entity
 @Table(name ="User")
 public class User {
@@ -25,11 +24,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-
+    @Autowired
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public User() {
     }
 
     public long getId() {
