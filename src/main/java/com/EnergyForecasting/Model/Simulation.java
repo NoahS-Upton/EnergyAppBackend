@@ -14,14 +14,15 @@ public class Simulation {
     @Column(nullable = false, updatable = false)
     private Long id;
     //stats on region being simulated
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "simulationRegions",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "regionid")
     )
     private Set<Region> simulationRegions= new HashSet<>();
-    @ManyToMany(cascade = CascadeType.ALL)
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "simulationCounties",
             joinColumns = @JoinColumn(name = "id"),
@@ -51,6 +52,10 @@ public class Simulation {
         this.wind = wind;
         this.solar = solar;
     }
+
+
+
+    //getters and setters
     public int getDays() {
         return days;
     }
