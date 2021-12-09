@@ -4,13 +4,15 @@ import com.EnergyForecasting.Exceptions.CountyNotFoundException;
 import com.EnergyForecasting.Exceptions.RegionNotFoundException;
 import com.EnergyForecasting.Exceptions.SimulationNotFoundException;
 import com.EnergyForecasting.Model.*;
-import com.EnergyForecasting.Repository.*;
+import com.EnergyForecasting.Repository.CountyRepo;
+import com.EnergyForecasting.Repository.PlantRepo;
+import com.EnergyForecasting.Repository.RegionRepo;
+import com.EnergyForecasting.Repository.SimulationRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
-
 @Service
 @Transactional
 @Slf4j
@@ -21,9 +23,6 @@ public class SimulationService {
     private Calculation calculation;
     private RegionRepo regionRepo;
     private CountyRepo countyRepo;
-    private SimDaylightRepo simDaylightRepo;
-    private SimWindRepo simWindRepo;
-
     public SimulationService(SimulationRepo simulationRepo, PlantRepo plantRepo, PlantService plantService, RegionRepo regionRepo, CountyRepo countyRepo) {
         this.simulationRepo = simulationRepo;
         this.plantRepo = plantRepo;
@@ -32,22 +31,18 @@ public class SimulationService {
         this.countyRepo = countyRepo;
         this.calculation = new Calculation();
     }
-
     public Simulation saveSimulation(Simulation simulation){
         return simulationRepo.save(simulation);
     }
-
     public List<Simulation> getAllSimulations() {
         return simulationRepo.findAll();
     }
-
     public Simulation updateSimulation (Simulation simulation){
         return simulationRepo.save(simulation);
     }
     public void deleteSimulationById (Long id) {
         simulationRepo.deleteSimulationById(id);
     }
-
     public Simulation getSimulationById(Long id) {
         return simulationRepo.findSimulationById(id).orElseThrow(() -> new SimulationNotFoundException("Simulation with ID=" + id + " not found"));
     }
@@ -57,12 +52,10 @@ public class SimulationService {
     public Region findByRegionID(Long regionID) {
         return regionRepo.findByRegionID(regionID).orElseThrow(() -> new RegionNotFoundException("Region with ID=" + regionID + " not found"));
     }
-
     public ArrayList<Plant> getAllPlants(){
         ArrayList<Plant> plants= (ArrayList<Plant>) plantService.getAllPlants();
         return plants;
     }
-
     public ArrayList<Plant> getPlantByRegion(String region){
         ArrayList<Plant> plants=plantService.getPlantsByRegion(region);
         return plants;
@@ -71,25 +64,15 @@ public class SimulationService {
         ArrayList<Plant> plants=plantService.getPlantsByCounty(county);
         return plants;
     }
-
-
-
-
-
-    public Simulation advancedSimulation(Set<Region> regions, Set<County> counties, int days, boolean hourly, SimDaylight[] daylight, SimWind[] windSpeed, boolean wind, boolean solar){
-        Simulation sim= new Simulation(regions,counties,days,hourly,daylight,windSpeed,wind,solar);
-
+    public Simulation advancedSimulation(Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
+        Simulation sim= new Simulation(regions,counties,days,hourly,wm2,windSpeed,wind,solar);
         //gets all counties in regions and appends to county list for calculations
-
         simulationRepo.save(sim);
         runSimulation(sim);
         return sim;
     }
-
-
     public SimulationOutput runSimulation(Simulation simulation) {
         Simulation sim = simulation;
-
         //instantiate variables for creating output entity
         ArrayList<String> counties=new ArrayList<String>();
         ArrayList<String> regions=new ArrayList<String>();
@@ -97,10 +80,6 @@ public class SimulationService {
         HashMap<String, ArrayList<Double>> solarOutputs = new HashMap<String, ArrayList<Double>>();
         HashMap<String, ArrayList<Double>> offshoreOutputs = new HashMap<String, ArrayList<Double>>();
         HashMap<String, ArrayList<Double>> onshoreOutputs = new HashMap<String, ArrayList<Double>>();
-
-
-        SimWind[] simWinds= sim.getWindSpeed();
-        System.out.println(simWinds[0].getValue());
         //takes county/region name and appends to array for output
         for (County c: sim.getCounties()) {
             counties.add(c.getCounty());
@@ -108,7 +87,6 @@ public class SimulationService {
         for (Region r: sim.getRegions()) {
             regions.add(r.getRegion());
         }
-
         HashSet<String> set= new HashSet<>();
         //additional loop to convert regions into to composite counties
         for (String r: regions) {//cycles through regions
@@ -116,37 +94,33 @@ public class SimulationService {
             System.out.println(temp.size());
             for (Plant p: temp ) {//cycles through plants in region getting unique county names
                 if (p.getCounty()!=null){
-                set.add(p.getCounty());
+                    set.add(p.getCounty());
 
                 }
             }
         }
         for (String s: set) {
             if(!counties.contains(s)){
-            counties.add(s);
+                counties.add(s);
             }
         }
-
         //calculates increments of simulation
         if (sim.isHourly()){
             intervals=sim.getDays()*24;
         }else if(!sim.isHourly()){
             intervals=sim.getDays();
         }
-
-
         //total capacity for each energy type for each region
         double countyOnshoreCapacity = 0.0;
         double countyOffshoreCapacity = 0.0;
         double countySolarCapacity = 0.0;
-
         //variable for storing the calculated values of energy production
         ArrayList<Double> onshoreProduction = new ArrayList<Double>();
         ArrayList<Double> offshoreProduction = new ArrayList<Double>();
         ArrayList<Double> solarProduction = new ArrayList<Double>();
-
         for (String s : counties) {
             ArrayList<Plant> countyPlants = getPlantByCounty(s);
+//            System.out.println(countyPlants.get(0).getName());
             //gets capacities for calculations
             for (Plant p : countyPlants) {
                 if (p.getType().equalsIgnoreCase("onshore")) {
@@ -157,35 +131,19 @@ public class SimulationService {
                     countyOffshoreCapacity += p.getCapacity();
                 }
             }
-            System.out.println("hat");
-            System.out.println(countyOnshoreCapacity);
-            System.out.println("cat");
-            System.out.println(sim.getWindSpeed()[0].getValue());
-
-            for (SimWind w :sim.getWindSpeed()) {
-                if (sim.isWind()) {
-                    offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity,w.getValue()));
-                    onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity, w.getValue()));
-                } else {
-                    offshoreProduction.add(0.00);
-                    onshoreProduction.add(0.00);
-                }
+            if ((sim.getWindSpeed() < 25 && sim.getWindSpeed() > 5 && sim.isWind())) {
+                offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity, sim.getWindSpeed()));
+                onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity, sim.getWindSpeed()));
+            } else {
+                offshoreProduction.add(0.00);
+                onshoreProduction.add(0.00);
             }
-            for (SimDaylight d:sim.getDaylightHours()) {
-                if (sim.isSolar()) {
-                    solarProduction.add(calculation.solarHourlyOutput(countySolarCapacity,d.getValue()));
-                }
+            if (sim.isSolar()) {
+                solarProduction.add(calculation.solarHourlyOutput(countySolarCapacity, sim.getDaylightHours()));
             }
-
             solarOutputs.put(s, new ArrayList<Double>());
             offshoreOutputs.put(s, new ArrayList<Double>());
             onshoreOutputs.put(s, new ArrayList<Double>());
-
-            System.out.println(s);
-            System.out.println(onshoreProduction.get(0));
-            System.out.println(offshoreProduction.get(0));
-            System.out.println(solarProduction.get(0));
-
             for (Double d: solarProduction) {
                 solarOutputs.get(s).add(d);
             }
@@ -195,9 +153,7 @@ public class SimulationService {
             for (Double d: onshoreProduction) {
                 onshoreOutputs.get(s).add(d);
             }
-
             System.out.println(onshoreOutputs.get(s).get(0));
-
             //reset variables
             countyOnshoreCapacity = 0.0;
             countyOffshoreCapacity = 0.0;
@@ -206,18 +162,14 @@ public class SimulationService {
             offshoreProduction.clear();
             solarProduction.clear();
         }
-
         SimulationOutput simOut= new SimulationOutput(counties,regions, intervals, solarOutputs,offshoreOutputs, onshoreOutputs);
         simulationRepo.save(sim);
         return simOut;
     }
-
-
     //takes previous generated simulation and reruns it to return values to screen
     public SimulationOutput rerunSimulation(Long id){
         Simulation sim=getSimulationById(id);
-       return runSimulation(sim);
+        return runSimulation(sim);
     }
 }
-
 
