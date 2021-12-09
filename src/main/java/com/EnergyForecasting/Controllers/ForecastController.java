@@ -45,6 +45,7 @@ public class ForecastController {
         Forecast addedForecast= forecastService.saveForecast(f);
         return new ResponseEntity<>(addedForecast, HttpStatus.CREATED);
     }
+
     @GetMapping("/addByValues/{days}/{hourly}/{solar}/{offshore}/{onshore}/{user}")
     public ResponseEntity<Forecast>rerunForecast(@PathVariable int days,@PathVariable boolean hourly,
                                                          @PathVariable boolean solar, @PathVariable boolean offshore,

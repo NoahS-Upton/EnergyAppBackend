@@ -78,4 +78,14 @@ public class SimulationController {
         simulation.assignRegion(region);
         return simulationService.saveSimulation(simulation);
     }
+
+    @GetMapping("/addByValues/{days}/{hourly}/{solar}/{wind}/{windspeed}/{daylight}")
+    public ResponseEntity<Simulation>rerunForecast(@PathVariable int days,@PathVariable boolean hourly,
+                                                 @PathVariable boolean solar, @PathVariable boolean wind,
+                                                 @PathVariable double windspeed,@PathVariable int daylight
+    ) {
+        Simulation simulation= new Simulation(null, null, days,hourly, daylight, windspeed, wind, solar);
+        simulationService.saveSimulation(simulation);
+        return new ResponseEntity<>(simulation, HttpStatus.OK);
+    }
 }
