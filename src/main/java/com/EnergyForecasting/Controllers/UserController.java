@@ -11,19 +11,19 @@ import java.security.NoSuchAlgorithmException;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
     private UserService userService;
 
+    //constructor
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
+    //adds new user
     @PostMapping("/add")
     public ResponseEntity<User> addUser(@RequestBody User user) throws NoSuchAlgorithmException {
         userService.registerUser(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
-
+    //sends empty user entity to front end
     @GetMapping("/null")
     public ResponseEntity<User> getNullUser(){
         User user= new User();
