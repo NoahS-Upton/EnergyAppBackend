@@ -111,7 +111,7 @@ public class ForecastController {
         return forecastService.saveForecast(forecast);
     }
     //assigns a region to a forecast before calculations by region name instea of id
-    @PutMapping("/{forecastID}/region/{region}")
+    @PutMapping("/{forecastID}/regionByName/{region}")
     public Forecast assignRegionToForecastByName(@PathVariable Long forecastID, @PathVariable String region){
         Forecast forecast = forecastService.getForecastById(forecastID);
         List<Region> regions=regionService.getAllRegions();
@@ -124,7 +124,7 @@ public class ForecastController {
         return forecastService.saveForecast(forecast);
     }
     //assigns a county to a forecast before calculations
-    @PutMapping("/{forecastID}/county/{county}")
+    @PutMapping("/{forecastID}/countyByName/{county}")
     public Forecast assignCountyToForecastByName(@PathVariable Long forecastID, @PathVariable String county){
         Forecast forecast = forecastService.getForecastById(forecastID);
         List<County> counties=countyService.getAllCounties();
