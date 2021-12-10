@@ -40,42 +40,46 @@ public class ForecastService {
         this.calculation = new Calculation();
         this.apiCaller = new APICaller();
     }
-
+    //saves a new forecast
     public Forecast saveForecast(Forecast forecast){
         return forecastRepo.save(forecast);
     }
-
+    //gets all previously run forecasts
     public List<Forecast> getAllForecasts() {
         return forecastRepo.findAll();
     }
-
+    //updates an existing forecast
     public Forecast updateForecast (Forecast forecast){
         return forecastRepo.save(forecast);
     }
+    //deletes an existing forecast
     public void deleteForecast (Long forecastID) {
         forecastRepo.deleteForecastById(forecastID);
     }
-
-
+    //gets a forecast by its id
     public Forecast getForecastById (Long id){
         return forecastRepo.findForecastById(id).orElseThrow(() -> new ForecastNotFoundException("Forecast with ID=" + id + " not found"));
     }
-
+    //get plants in region
     public List<Plant> getPlantByRegion(String region){
         List<Plant> plants=plantService.getPlantsByRegion(region);
         return plants;
     }
+    //gets plants in county
     public ArrayList<Plant> getPlantByCounty(String county){
         ArrayList<Plant> plants=plantService.getPlantsByCounty(county);
         return plants;
     }
+    //gets county by its ID
     public County findByCountyID(Long countyID) {
         return countyRepo.findByCountyID(countyID).orElseThrow(() -> new CountyNotFoundException("County with ID=" + countyID + " not found"));
     }
+    //gets region by its id
     public Region findByRegionID(Long regionID) {
         return regionRepo.findByRegionID(regionID).orElseThrow(() -> new RegionNotFoundException("Region with ID=" + regionID + " not found"));
     }
 
+    //runs a new forecast
     public ForecastToScreen runForecast(@NonNull Forecast forecast) throws IOException, InterruptedException {
         //used for creating forecast outputs to display to the screen
         ArrayList<String> counties=new ArrayList<String>();
@@ -94,6 +98,7 @@ public class ForecastService {
         ArrayList<Plant> plants = new ArrayList<Plant>();
         HashSet<String> set= new HashSet<>();
 
+        //adds counties to forecast
         for (County c:forecast.getForecastCounties()) {
                 counties.add(c.getCounty());
         }
@@ -123,18 +128,20 @@ public class ForecastService {
             System.out.println(intervals);
         }
 
+        //instantiation of variables used in forecast process
         //total capacity for each energy type for each region
         double countyOnshoreCapacity = 0.0;
         double countyOffshoreCapacity = 0.0;
         double countySolarCapacity = 0.0;
-
+        //production of each county
         double countyOnshoreProduction=0.0;
         double countyOffshoreProduction=0.0;
         double countySolarProduction=0.0;
-
+        //windspeed and solar radiation, values taken from api
         double windspeed=0.0;
         double wm2=0.0;
 
+        //instantiates classes needed for calculating energy outputs
         Calculation calculation= new Calculation();
         APICaller apiCaller=new APICaller();
         plants.clear();
@@ -148,7 +155,7 @@ public class ForecastService {
 
 
 
-
+        //gets forecast data for each county
         for (String c: counties) {
             //gets all plants in county needed for calculation, as well as taking lat/long etc. from this plant
             plants = plantService.getPlantsByCounty(c);
@@ -158,7 +165,7 @@ public class ForecastService {
             latChar = plant.getLatChar();
             longChar = plant.getLongChar();
 
-
+            //calls the api for the input values for each county being forecast
             apiCaller.getForecastData(forecast.isHourly(), intervals, longitude, latitude, longChar, latChar);
 
             for (int i = 0; i < intervals; i++) {
@@ -173,8 +180,10 @@ public class ForecastService {
                     }
                 }
 
+                //gets windspeed from saved api data
                 windspeed = Double.parseDouble(apiCaller.getWindSpeed().get(i));
                 wm2 = Double.parseDouble(apiCaller.getSolarWM2().get(i));
+
 
                 countyOffshoreProduction = calculation.windOutput(countyOffshoreCapacity, windspeed);
                 countyOnshoreProduction = calculation.windOutput(countyOnshoreCapacity, windspeed);
@@ -204,10 +213,12 @@ public class ForecastService {
             windspeed = 0.0;
             wm2 = 0.0;
         }
+        //returns forecast output
         ForecastToScreen out= new ForecastToScreen(counties,regions,intervals,fts, forecast);
         return out;
     }
 
+    //reruns saved forecast
     public ForecastToScreen rerunForecast(Long id) throws IOException, InterruptedException {
         Forecast forecast=getForecastById(id);
         return runForecast(forecast);

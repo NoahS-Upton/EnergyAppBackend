@@ -9,10 +9,14 @@ import com.EnergyForecasting.Repository.PlantRepo;
 import com.EnergyForecasting.Repository.RegionRepo;
 import com.EnergyForecasting.Repository.SimulationRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.*;
+
+/*
+service for managing all simulations in the system
+ */
 @Service
 @Transactional
 @Slf4j
@@ -23,6 +27,9 @@ public class SimulationService {
     private Calculation calculation;
     private RegionRepo regionRepo;
     private CountyRepo countyRepo;
+
+    //constructor
+    @Autowired
     public SimulationService(SimulationRepo simulationRepo, PlantRepo plantRepo, PlantService plantService, RegionRepo regionRepo, CountyRepo countyRepo) {
         this.simulationRepo = simulationRepo;
         this.plantRepo = plantRepo;
@@ -31,39 +38,50 @@ public class SimulationService {
         this.countyRepo = countyRepo;
         this.calculation = new Calculation();
     }
+    //saves a new simulation
     public Simulation saveSimulation(Simulation simulation){
         return simulationRepo.save(simulation);
     }
+    //gets all previously run simulations
     public List<Simulation> getAllSimulations() {
         return simulationRepo.findAll();
     }
+    //updates existing simulation
     public Simulation updateSimulation (Simulation simulation){
         return simulationRepo.save(simulation);
     }
+    //deletes existing simulation
     public void deleteSimulationById (Long id) {
         simulationRepo.deleteSimulationById(id);
     }
+    //gets individual simulation from its id
     public Simulation getSimulationById(Long id) {
         return simulationRepo.findSimulationById(id).orElseThrow(() -> new SimulationNotFoundException("Simulation with ID=" + id + " not found"));
     }
+    //gets specific county
     public County findByCountyID(Long countyID) {
         return countyRepo.findByCountyID(countyID).orElseThrow(() -> new CountyNotFoundException("County with ID=" + countyID + " not found"));
     }
+    //gets specific region
     public Region findByRegionID(Long regionID) {
         return regionRepo.findByRegionID(regionID).orElseThrow(() -> new RegionNotFoundException("Region with ID=" + regionID + " not found"));
     }
+    //gets all plants
     public ArrayList<Plant> getAllPlants(){
         ArrayList<Plant> plants= (ArrayList<Plant>) plantService.getAllPlants();
         return plants;
     }
+    //gets plants in a specific region
     public ArrayList<Plant> getPlantByRegion(String region){
         ArrayList<Plant> plants=plantService.getPlantsByRegion(region);
         return plants;
     }
+    //gets plants in a specific county
     public ArrayList<Plant> getPlantByCounty(String county){
         ArrayList<Plant> plants=plantService.getPlantsByCounty(county);
         return plants;
     }
+    //runs advanced simulation
     public Simulation advancedSimulation(Set<Region> regions, Set<County> counties, int days, boolean hourly, double wm2, double windSpeed, boolean wind, boolean solar){
         Simulation sim= new Simulation(regions,counties,days,hourly,wm2,windSpeed,wind,solar);
         //gets all counties in regions and appends to county list for calculations
@@ -71,6 +89,7 @@ public class SimulationService {
         runSimulation(sim);
         return sim;
     }
+    //runs simulation
     public SimulationOutput runSimulation(Simulation simulation) {
         Simulation sim = simulation;
         //instantiate variables for creating output entity
