@@ -12,7 +12,7 @@ public class SimulationOutput {
     private HashMap<String, ArrayList<Double>> offShoreOutputs;
     private HashMap<String, ArrayList<Double>> onShoreOutputs;
 
-    //constructor
+    //constructors
     public SimulationOutput(ArrayList<String> counties, ArrayList<String> regions, int intervals, HashMap<String, ArrayList<Double>> solarOutputs, HashMap<String, ArrayList<Double>> offShoreOutputs, HashMap<String, ArrayList<Double>> onShoreOutputs) {
         this.counties = counties;
         this.regions = regions;
@@ -20,6 +20,9 @@ public class SimulationOutput {
         this.solarOutputs = solarOutputs;
         this.offShoreOutputs = offShoreOutputs;
         this.onShoreOutputs = onShoreOutputs;
+    }
+    public SimulationOutput() {
+
     }
 
     //getters and setters

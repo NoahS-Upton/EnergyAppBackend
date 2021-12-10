@@ -60,6 +60,13 @@ public class SimulationController {
         Simulation simulation= new Simulation();
         return new ResponseEntity<Simulation>(simulation, HttpStatus.OK);
     }
+    //passes an empty simulation output entity to front end
+    @GetMapping("/nullOut")
+    public ResponseEntity<SimulationOutput> getNullSimulationOutput(){
+        SimulationOutput simOut= new SimulationOutput();
+        return new ResponseEntity<SimulationOutput>(simOut, HttpStatus.OK);
+    }
+
     //runs simulation
     @GetMapping("/runSimulation")
     public ResponseEntity<SimulationOutput> runSimulation(@RequestBody Simulation simulation){
