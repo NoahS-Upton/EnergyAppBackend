@@ -12,6 +12,7 @@ public class SimulationOutput {
     private HashMap<String, ArrayList<Double>> offShoreOutputs;
     private HashMap<String, ArrayList<Double>> onShoreOutputs;
 
+    //constructor
     public SimulationOutput(ArrayList<String> counties, ArrayList<String> regions, int intervals, HashMap<String, ArrayList<Double>> solarOutputs, HashMap<String, ArrayList<Double>> offShoreOutputs, HashMap<String, ArrayList<Double>> onShoreOutputs) {
         this.counties = counties;
         this.regions = regions;
@@ -21,6 +22,7 @@ public class SimulationOutput {
         this.onShoreOutputs = onShoreOutputs;
     }
 
+    //getters and setters
     public ArrayList<String> getCounties() {
         return counties;
     }

@@ -1,19 +1,18 @@
 package com.EnergyForecasting.Model;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+//class that is used to run new simulations and store data about already un simulations
 @Entity
 public class Simulation {
-
     //ID to track simulation
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     private Long id;
-    //stats on region being simulated
+    //region being simulated
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "simulationRegions",
@@ -21,7 +20,7 @@ public class Simulation {
             inverseJoinColumns = @JoinColumn(name = "regionid")
     )
     private Set<Region> simulationRegions= new HashSet<>();
-
+    //counties being simulated
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "simulationCounties",
@@ -84,7 +83,6 @@ public class Simulation {
     public void setSolar(boolean solar) {
         this.solar = solar;
     }
-
     public Set<Region> getSimulationRegions() {
         return simulationRegions;
     }
@@ -97,15 +95,12 @@ public class Simulation {
     public void setSimulationCounties(Set<County> simulationCounties) {
         this.simulationCounties = simulationCounties;
     }
-
     public double getDaylightHours() {
         return daylightHours;
     }
-
     public void setDaylightHours(double daylightHours) {
         this.daylightHours = daylightHours;
     }
-
     public Set<Region> getRegions() {
         return simulationRegions;
     }

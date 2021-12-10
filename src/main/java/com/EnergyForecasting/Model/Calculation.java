@@ -1,21 +1,20 @@
 package com.EnergyForecasting.Model;
-
+//performs energy output calculations
 public class Calculation {
-
     public Calculation() {
     }
-
+    //calculates solar output from daylight hours
     public static double solarHourlyOutput(double capacity, double hours){
             double output = capacity*hours*0.75;
             return output;
         }
-
+    //calculates solar output from solar radiation
     public static double solarRadOutput(double capacity, double rads){
-        double output = capacity*rads*0.75;
+        double output = capacity*rads/100;
         return output;
     }
 
-
+    //calculates wind output dependent on speed
         public static double windOutput(double capacity, double windspeed){
             double output;
             if (windspeed>50 && windspeed<=90){
@@ -37,7 +36,6 @@ public class Calculation {
             }else{
                 output = 0.0;
             }
-
             return output;
         }
 }

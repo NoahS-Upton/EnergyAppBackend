@@ -2,12 +2,12 @@ package com.EnergyForecasting.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+//forecast entity, used to save settings for saved forecasts and as inputs to run new forecast
 @Entity
 @Table(name = "forecast")
 public class Forecast implements Serializable {
@@ -29,7 +29,7 @@ public class Forecast implements Serializable {
     @Column(name="userID")
     private String userID;
 
-
+    //links with associated regions
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "forecastRegions",
@@ -37,6 +37,7 @@ public class Forecast implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "regionid")
     )
     private Set<Region> forecastRegions= new HashSet<>();
+    //links with associated counties
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "forecastCounties",
@@ -46,14 +47,13 @@ public class Forecast implements Serializable {
     private Set<County> forecastCounties=new HashSet<>();
 
 
-
     // Outputs to screen
     @JsonIgnore
     @OneToMany(mappedBy = "forecast")
     private Set<ForecastOutput> countyOutputs= new HashSet<>();
 
 
-
+    //constructors
     public Forecast() {
     }
 
@@ -70,19 +70,15 @@ public class Forecast implements Serializable {
     }
 
     //getters and setters for retrieving forecast(input variables)
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public void setForecastId(Long id) {
         this.id = id;
     }
-
     public boolean isHourly() {
         return hourly;
     }
@@ -119,43 +115,24 @@ public class Forecast implements Serializable {
     public void setUserID(String userID) {
         this.userID = userID;
     }
-
     public Set<Region> getForecastRegions() {
         return forecastRegions;
     }
-
     public void setForecastRegions(Set<Region> forecastRegions) {
         this.forecastRegions = forecastRegions;
     }
-
     public Set<County> getForecastCounties() {
         return forecastCounties;
     }
-
     public void setForecastCounties(Set<County> forecastCounties) {
         this.forecastCounties = forecastCounties;
     }
-
-    //getters and setters for forecast output variables
-
-
-//    public Set<ForecastCountyOutputs> getCountyOutputs() {
-//        return countyOutputs;
-//    }
-//
-//    public void setCountyOutputs(Set<ForecastCountyOutputs> countyOutputs) {
-//        this.countyOutputs = countyOutputs;
-//    }
-
-
     public Set<ForecastOutput> getCountyOutputs() {
         return countyOutputs;
     }
-
     public void setCountyOutputs(Set<ForecastOutput> countyOutputs) {
         this.countyOutputs = countyOutputs;
     }
-
     public void assignCounty(County county) {
         forecastCounties.add(county);
     }
