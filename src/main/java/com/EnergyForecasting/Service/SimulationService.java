@@ -11,6 +11,7 @@ import com.EnergyForecasting.Repository.SimulationRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -100,10 +101,10 @@ public class SimulationService {
         HashMap<String, ArrayList<Double>> offshoreOutputs = new HashMap<String, ArrayList<Double>>();
         HashMap<String, ArrayList<Double>> onshoreOutputs = new HashMap<String, ArrayList<Double>>();
         //takes county/region name and appends to array for output
-        for (County c: sim.getCounties()) {
+        for (County c: sim.getSimulationCounties()) {
             counties.add(c.getCounty());
         }
-        for (Region r: sim.getRegions()) {
+        for (Region r: sim.getSimulationRegions()) {
             regions.add(r.getRegion());
         }
         HashSet<String> set= new HashSet<>();
@@ -139,7 +140,6 @@ public class SimulationService {
         ArrayList<Double> solarProduction = new ArrayList<Double>();
         for (String s : counties) {
             ArrayList<Plant> countyPlants = getPlantByCounty(s);
-//            System.out.println(countyPlants.get(0).getName());
             //gets capacities for calculations
             for (Plant p : countyPlants) {
                 if (p.getType().equalsIgnoreCase("onshore")) {
@@ -150,7 +150,7 @@ public class SimulationService {
                     countyOffshoreCapacity += p.getCapacity();
                 }
             }
-            if ((sim.getWindSpeed() < 25 && sim.getWindSpeed() > 5 && sim.isWind())) {
+            if (sim.isWind()) {
                 offshoreProduction.add(calculation.windOutput(countyOffshoreCapacity, sim.getWindSpeed()));
                 onshoreProduction.add(calculation.windOutput(countyOnshoreCapacity, sim.getWindSpeed()));
             } else {
@@ -160,6 +160,8 @@ public class SimulationService {
             if (sim.isSolar()) {
                 solarProduction.add(calculation.solarHourlyOutput(countySolarCapacity, sim.getDaylightHours()));
             }
+            System.out.println(onshoreProduction.get(0));
+
             solarOutputs.put(s, new ArrayList<Double>());
             offshoreOutputs.put(s, new ArrayList<Double>());
             onshoreOutputs.put(s, new ArrayList<Double>());
@@ -172,7 +174,7 @@ public class SimulationService {
             for (Double d: onshoreProduction) {
                 onshoreOutputs.get(s).add(d);
             }
-            System.out.println(onshoreOutputs.get(s).get(0));
+
             //reset variables
             countyOnshoreCapacity = 0.0;
             countyOffshoreCapacity = 0.0;
