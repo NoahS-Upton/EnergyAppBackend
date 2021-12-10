@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
+//repository for regions
 @Repository
 @Transactional
 public interface RegionRepo extends JpaRepository<Region, Long> {
