@@ -20,6 +20,9 @@ public class ForecastToScreen {
         this.forecast = forecast;
     }
 
+    public ForecastToScreen() {
+    }
+
     //getters and setters
     public ArrayList<String> getCounties() {
         return counties;

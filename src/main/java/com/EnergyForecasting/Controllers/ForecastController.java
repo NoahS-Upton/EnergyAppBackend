@@ -77,6 +77,13 @@ public class ForecastController {
         Forecast forecast= new Forecast();
         return new ResponseEntity<Forecast>(forecast, HttpStatus.OK);
     }
+    //gets an empty instance of a fts
+    @GetMapping("/nullfts")
+    public ResponseEntity<ForecastToScreen> getNullForecastToScreen(){
+        ForecastToScreen fts= new ForecastToScreen();
+        return new ResponseEntity<ForecastToScreen>(fts, HttpStatus.OK);
+    }
+
     //runs a specific forecast
     @GetMapping("/runForecast")
     public ResponseEntity<ForecastToScreen> runForecast(@RequestBody Forecast forecast) throws IOException, InterruptedException {
@@ -144,5 +151,7 @@ public class ForecastController {
         forecastOutput.assignForecast(forecast);
         return forecastService.saveForecast(forecast);
     }
+
+
 
 }
