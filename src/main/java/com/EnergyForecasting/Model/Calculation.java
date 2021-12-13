@@ -10,7 +10,7 @@ public class Calculation {
         }
     //calculates solar output from solar radiation
     public static double solarRadOutput(double capacity, double rads){
-        double output = capacity*rads/100;
+        double output = (capacity*rads*0.48*0.75)/60;
         return output;
     }
 
