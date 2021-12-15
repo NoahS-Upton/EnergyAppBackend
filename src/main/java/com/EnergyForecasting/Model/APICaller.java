@@ -127,7 +127,6 @@ public class APICaller {
             if(data[i].contains("solradWM2")){
                 solarWM2.add(data[i+1]);
             }
-
             if(data[i].contains("tempC")){
                 temperature.add(data[i+1]);
             }

@@ -89,7 +89,7 @@ public class ForecastService {
         HashMap<Integer, ArrayList<Double>> offshoreOutputs = new HashMap<Integer, ArrayList<Double>>();
         HashMap<Integer, ArrayList<Double>> onshoreOutputs = new HashMap<Integer, ArrayList<Double>>();
 
-        //creates array for storing forecastouputs for each county to be added into fts
+        //creates array for storing forecastoutputs for each county to be added into fts
         ArrayList<ForecastOutput> forecastOutputs= new ArrayList<ForecastOutput>();
         //creates container to send data to front end for forecast, in forecastToScreen
         HashMap<String,ArrayList<ForecastOutput>> fts= new HashMap<String,ArrayList<ForecastOutput>>();
@@ -168,7 +168,7 @@ public class ForecastService {
             //calls the api for the input values for each county being forecast
             apiCaller.getForecastData(forecast.isHourly(), intervals, longitude, latitude, longChar, latChar);
 
-            for (int i = 0; i < intervals; i++) {
+            for (int i = 0; i < intervals-1; i++) {
                 //gets capacities for calculations
                 for (Plant p : plants) {
                     if (p.getType().equalsIgnoreCase("onshore")) {
