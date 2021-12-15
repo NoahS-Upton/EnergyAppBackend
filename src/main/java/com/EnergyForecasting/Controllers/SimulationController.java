@@ -40,7 +40,7 @@ public class SimulationController {
     @PostMapping("/add")
     public ResponseEntity<Simulation> addSimulation(@RequestBody Simulation s){
         Simulation addedSimulation= simulationService.saveSimulation(s);
-        return new ResponseEntity<>( HttpStatus.CREATED);
+        return new ResponseEntity<Simulation>(addedSimulation, HttpStatus.CREATED);
     }
     //updates an existing simulation
     @PutMapping("/update")
